@@ -1,39 +1,22 @@
-import os
-import google.oauth2.credentials
-import google_auth_oauthlib.flow
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from google_auth_oauthlib.flow import InstalledAppFlow
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.tools import run_flow
+from oauth2client.file import Storage
+import httplib2
 
-SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
-API_SERVICE_NAME = 'youtubeAnalytics'
-API_VERSION = 'v2'
-CLIENT_SECRETS_FILE = 'client_secret_646770396162-8lpivh3piff4a39s9unaupr57v9c5lc0.apps.googleusercontent.com.json'
-def get_service():
-  flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
-  credentials = flow.run_console()
-  return build(API_SERVICE_NAME, API_VERSION, credentials = credentials)
+SERVICE_NAME = "youtubereporting"
+VERSION = 'v1'
+SCOPE = 'https://www.googleapis.com/auth/yt-analytics.readonly'
+CLIENT_SECRETS_FILE = "client_secret_646770396162-8lpivh3piff4a39s9unaupr57v9c5lc0.apps.googleusercontent.com.json"  # Presuming you made this and in dir w/ it
+flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE, scope=SCOPE, message=' f off ')
 
-def execute_api_request(client_library_function, **kwargs):
-  global response
-  response = client_library_function(
-    **kwargs
-  ).execute()
+# 
+credentials_file = 'name-of-OAuth2-file.json' # e.g., projectName-oauth2.json
+storage = Storage(credentials_file) 
+credentials = storage.get()   # Returns None if the file doesn't exist
+if credentials is None or credentials.invalid:
+    credentials = run_flow(flow, storage)  # This creates the credentials_file
+reporting_api = build(SERVICE_NAME,  VERSION,  http=credentials.authorize(httplib2.Http()))
+result=reporting_api.reportTypes().list().execute()
 
-  print(response)
-
-if __name__ == '__main__':
-  # Disable OAuthlib's HTTPs verification when running locally.
-  # *DO NOT* leave this option enabled when running in production.
-  youtubeAnalytics = get_service()
-  execute_api_request(
-      youtubeAnalytics.reports().query,
-      ids='channel==MINE',
-      startDate='2021-01-01',
-      endDate='2021-05-31',
-      metrics='estimatedMinutesWatched,views,likes,subscribersGained',
-      dimensions='day',
-      sort='day'
-  )
-
-
+print(result)
