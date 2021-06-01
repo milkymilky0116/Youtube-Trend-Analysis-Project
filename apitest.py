@@ -1,13 +1,6 @@
 #Youtube API를 불러오기 위해 Google-api-client 모듈을 불러옴
-import os
-import sys
-file_path = os.path.dirname(__file__)
-module_path = os.path.join(file_path, "lib")
-sys.path.append(module_path)
-
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from oauth2client.tools import argparser
 
 #API KEY는 구글 클라우드 서비스에서 제공 받았고 앱이 제대로 실행되기 위해서는 키가 있어야함
 DEVELOPER_KEY="AIzaSyAse67X9AAIXmK1UAPAcI8Ju71y9pijHnc"
