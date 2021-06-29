@@ -13,7 +13,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding,LSTM,Dense
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from util.sentence_tokenize import *
-
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 os.chdir('C:\youtube_trend\Youtube-Trend-Analysis-Project')
 komoran=Komoran(DEFAULT_MODEL['FULL'])
 komoran.set_user_dic('dataset\dic.user')
@@ -26,6 +26,8 @@ for col in ['video_id', 'trending_date', 'channelTitle', 'publishedAt', 'view_co
 
 yt_title=df['title']
 yt_category=df['categoryId']
+yt_description=df['description']
+yt_tags=df['tags']
 y_data=yt_category
 
 temp=data_tokenize(yt_title)
@@ -51,8 +53,14 @@ model.add(Dense(30, activation='softmax'))
 
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model_dir = './model'
+if not os.path.exists(model_dir):
+    os.mkdir(model_dir)
+model_path = model_dir + "/predict_yt_category.model"
+checkpoint = ModelCheckpoint(filepath=model_path, monitor="val_loss", verbose=1, save_best_only=True)
+early_stopping = EarlyStopping(monitor='val_loss', patience=7)
 
-model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test)) 
+history=model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test), callbacks=[checkpoint, early_stopping]) 
 
 category_list={
     1:'Film & Animation',
