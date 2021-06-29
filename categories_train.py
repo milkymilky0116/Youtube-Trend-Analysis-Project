@@ -1,5 +1,6 @@
 import csv
 import os
+from re import M
 from numpy.core.defchararray import title
 import tensorflow as tf
 import numpy as np
@@ -20,26 +21,19 @@ komoran.set_user_dic('dataset\dic.user')
 
 data=pd.read_csv('dataset/KRvideos.csv', engine='python')
 df=data[:]
-for col in ['video_id', 'trending_date', 'channel_title', 'publish_time', 'views' ,'likes' , 'dislikes']:
+for col in ['video_id', 'trending_date', 'channelTitle', 'publishedAt', 'view_count' ,'likes']:
     del df[col]
 
 yt_title=df['title']
-yt_category=df['category_id']
+yt_category=df['categoryId']
 y_data=yt_category
 
-"""
-temp=[]
-for i in range(len(df)):
-    sentence=yt_title[i]
-    sentence_nouns=komoran.get_morphes_by_tags(sentence, tag_list=['NNG','NNP','NNB','NP','NR','VV','VA','VC','MM','MA'])
-    temp.append(sentence_nouns)
-"""
 temp=data_tokenize(yt_title)
 x_data=temp
 tokenizer=Tokenizer()
 tokenizer.fit_on_texts(x_data)
 x_data=tokenizer.texts_to_sequences(x_data)
-x_data=pad_sequences(x_data, maxlen=45)
+x_data=pad_sequences(x_data, maxlen=30)
 
 y_data=to_categorical(y_data)
 
@@ -53,19 +47,51 @@ print(y_test.shape)
 model=Sequential()
 model.add(Embedding(25000, 128))
 model.add(LSTM(128))
-model.add(Dense(45, activation='softmax'))
+model.add(Dense(30, activation='softmax'))
 
-##########모델 학습
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs=50, validation_data=(x_test, y_test)) 
+model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test)) 
 
+category_list={
+    1:'Film & Animation',
+    2:'Autos & Vehicles',
+    10:"Music",
+    15:"Pets & Animals",
+    17:"Sports",
+    18:"Short Movies",
+    19:"Travel & Events",
+    20:"Gaming",
+    21:"Videoblogging",
+    22:"People & Blogs",
+    23:"Comedy",
+    24:"Entertainment",
+    25:"News & Politics",
+    26:"Howto & Style",
+    27:"Education",
+    28:"Science & Technology",
+    30:"Movies",
+    31:"Anime/Animation",
+    32:"Action/Adventure",
+    33:"Classics",
+    34:"Comedy",
+    35:"Documentary",
+    36:"Drama",
+    37:"Family",
+    38:"Foreign",
+    39:"Horror",
+    40:"Sci-Fi/Fantasy",
+    41:"Thriller",
+    42:"Shorts",
+    43:"Shows",
+    44:"Trailers"
+}
 
-test_title="[포켓몬 유나이트] 롤, 히오스 같은 포켓몬스터 게임 (Pokémon UNITE)"
+test_title="당신도 프로입니까? 아이패드 프로 12.9 (5세대) 리뷰 [4K]"
 token_sentence=sentence_tokenize(test_title)
 encode_sentence=tokenizer.texts_to_sequences([token_sentence])
-pad_sentence=pad_sequences(encode_sentence, maxlen=45)
+pad_sentence=pad_sequences(encode_sentence, maxlen=30)
 
 score=model.predict(pad_sentence)
-print(score.argmax(), score[0,score.argmax()])
+print(category_list[score.argmax()], score[0,score.argmax()])
