@@ -1,15 +1,16 @@
-var express=require('express'), http=require('http');
+'use strict';
 
-var app= express();
+const express = require('express');
 
-app.use(function(req, res, next){
-    console.log('첫번쨰 미들웨어에서 요청을 처리함');
-    res.writeHead('200',{'Content-Type':'text/html; charset=utf8'});
-    res.end('<h1>Express 서버에서 응답한 결과입니다.</h1>');
+// Constants
+const PORT = 8080;
+const HOST = '0.0.0.0';
 
+// App
+const app = express();
+app.get('/', (req, res) => {
+  res.send('Hello World');
 });
 
-http.createServer(app).listen(3000, function(){
-    console.log('Express server has been start : 3000');
- });
-  
+app.listen(PORT, HOST);
+console.log(`Running on http://${HOST}:${PORT}`);
