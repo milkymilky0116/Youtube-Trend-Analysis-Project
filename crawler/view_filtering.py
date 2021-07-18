@@ -9,7 +9,10 @@ def string_int_filtering(text):
     elif text.find('천')!=-1:
         int_count=int_count*1000
     return int(int_count)
-    
+
 for i in range(len(view_count)):
     text=view_count[i]
     print(string_int_filtering(text))
+
+
+view_rates=['189','123','1100,']

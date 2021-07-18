@@ -1,3 +1,6 @@
 from gensim.models import Word2Vec, word2vec
-model=word2vec.Word2Vec.load("post.embedding")
-print(model.wv.most_similar(positive=["먹방"]))
+import pandas as pd
+model=word2vec.Word2Vec.load("model/post.embedding")
+simillar_word=model.wv.most_similar(positive=["요리"])
+df=pd.DataFrame(simillar_word)
+print(df)

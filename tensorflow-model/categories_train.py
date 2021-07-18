@@ -57,7 +57,8 @@ model_dir = './model'
 if not os.path.exists(model_dir):
     os.mkdir(model_dir)
 model_path = model_dir + "/predict_yt_category.model"
-checkpoint = ModelCheckpoint(filepath=model_path, monitor="val_loss", verbose=1, save_best_only=True)
+checkpoint_path=model_dir+"/model/checkpoints/epoch_{epoch:03d}.ckpt"
+checkpoint = ModelCheckpoint(filepath=checkpoint_path, monitor="val_loss", verbose=1, save_best_only=True)
 early_stopping = EarlyStopping(monitor='val_loss', patience=7)
 
 history=model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test), callbacks=[checkpoint, early_stopping]) 
@@ -96,6 +97,7 @@ category_list={
     44:"Trailers"
 }
 
+model.save_weights('./model/checkpoints/my_checkpoints')
 test_title="당신도 프로입니까? 아이패드 프로 12.9 (5세대) 리뷰 [4K]"
 token_sentence=sentence_tokenize(test_title)
 encode_sentence=tokenizer.texts_to_sequences([token_sentence])
