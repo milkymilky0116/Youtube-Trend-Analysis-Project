@@ -50,7 +50,7 @@ def make_word_map(word):
         similar_words=model_lib.similar_by_word(word_similar_list[i])
         for x,y in similar_words:
             similarity_val=model_lib.similarity(word,x)
-            if similarity_val>0.5:
+            if similarity_val>0.6:
                 sources.append(word_similar_list[i])
                 targets.append(x)
                 weights.append(y)
@@ -79,7 +79,7 @@ def make_word_map(word):
             node['size']=node_size[node['id']]
 
 
-make_word_map('고양이')
+make_word_map('일렉트로닉')
 net.show('test.html')
 
 
