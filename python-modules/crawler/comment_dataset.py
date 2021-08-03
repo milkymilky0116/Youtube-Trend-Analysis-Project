@@ -2,6 +2,7 @@ import pandas as pd
 from selenium import webdriver
 import time
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from collections import OrderedDict
 from pytube import YouTube
 import requests
@@ -14,9 +15,13 @@ yt_video_id=df['video_id']
 yt_title=df['title']
 
 title_url_list=yt_video_id.tolist()
-
+chrome_options=webdriver.FirefoxOptions()
 def comment_crawler(title_url_list):
-    driver=webdriver.Chrome('driver/chromedriver.exe')
+    driver=webdriver.Remote(
+    command_executor='http://localhost:4444/wd/hub',
+    desired_capabilities=DesiredCapabilities.FIREFOX,
+    options=chrome_options)
+
     all_comments=[]
     for i in range(0,len(title_url_list)):
         time.sleep(5)
