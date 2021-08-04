@@ -10,6 +10,8 @@ community={
 
 }
 chrome_options=webdriver.FirefoxOptions()
+chrome_options.page_load_strategy='none'
+chrome_options.headless=True
 driver=webdriver.Remote(
     command_executor='http://localhost:4444/wd/hub',
     desired_capabilities=DesiredCapabilities.FIREFOX,
