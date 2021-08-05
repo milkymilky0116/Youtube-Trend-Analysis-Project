@@ -3,6 +3,7 @@
  * Reference: http://meyerweb.com/eric/tools/css/reset/
  */
 
+/* 원래 코드 */
  html, body, div, span, applet, object, iframe,
  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
  a, abbr, acronym, address, big, cite, code,
@@ -61,10 +62,6 @@
    font-family: monospace;
  }
  
- /**
-  * BASIC TYPE
-  */
- 
  img, video {
    max-width: 100%;
    vertical-align: middle;
@@ -95,10 +92,6 @@
    font-size: 1em;
  }
  
- /**
-  * BOX HACKING
-  */
- 
  html {
    box-sizing: border-box;
  }
@@ -114,11 +107,8 @@
    margin-left: auto;
    padding: 1.5em;
  }
- body {
-   background-color: #cccccc;
-   color: #333333;
- }
  .masonry-wrapper {
+   margin-top: 100px;
    padding: 1.5em;
    max-width: 960px;
    margin-right: auto;
@@ -163,3 +153,14 @@
    width:500px;
    height:400px;
  }
+
+
+
+/* 지연 추가 부분*/
+* {
+  background-color: #ffd54f;
+}
+
+head {
+  background-color: #ffab00;
+}
