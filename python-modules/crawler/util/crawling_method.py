@@ -13,6 +13,9 @@ from selenium import webdriver
 import re
 import pandas as pd
 from collections import OrderedDict
+from sklearn.feature_extraction.text import CountVectorizer
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 def scroll_to_bottom(driver):
@@ -78,3 +81,18 @@ def comment_crawler(title_url_list,driver):
         ('comment', all_comments)
     ])
     return comment_orderd_dict
+
+
+def extract_keywords(key_info,n):
+    ngram_range=(1,1)
+    count=CountVectorizer(ngram_range=ngram_range).fit([key_info])
+    candidates=count.get_feature_names()
+    model=SentenceTransformer('distilbert-base-nli-mean-tokens')
+    doc_embedding=model.encode([key_info])
+    candidates_embedding=model.encode(candidates)
+
+    top_n=n
+    distance=cosine_similarity(doc_embedding,candidates_embedding)
+    keywords=[candidates[index] for index in distance.argsort()[0][-top_n:]]
+
+    return keywords

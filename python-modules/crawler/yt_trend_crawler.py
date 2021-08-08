@@ -16,6 +16,7 @@ import pandas as pd
 from util.crawling_method import scroll_to_bottom, string_int_filtering
 from collections import OrderedDict
 from pytube import YouTube
+from util.crawling_method import extract_keywords
 
 
 
