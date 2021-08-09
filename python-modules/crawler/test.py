@@ -29,6 +29,7 @@ komoran.set_user_dic('dic.user')
 link="https://youtu.be/eHYDwEeJUf8"
 video_info=YouTube(link)
 keywords_list=video_info.keywords
+
 keywords=" ".join(keywords_list)
 
 title=video_info.title

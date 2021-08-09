@@ -50,7 +50,7 @@ def make_word_map(word):
         similar_words=model_lib.similar_by_word(word_similar_list[i])
         for x,y in similar_words:
             similarity_val=model_lib.similarity(word,x)
-            if similarity_val>0.5:
+            if similarity_val>0.7:
                 sources.append(word_similar_list[i])
                 targets.append(x)
                 weights.append(y)
@@ -65,8 +65,19 @@ def make_word_map(word):
     print(node_size)
     edge_data=zip(sources,targets,weights)
 
+    edge_data_sort=sorted(edge_data,key= lambda t: t[2], reverse=True)
+
+    search_list=[]
+    for i in range(5):
+        search_list.append(edge_data_sort[i][0])
+    search_list=set(search_list)
+    print(search_list)
+
+    return search_list
+
     
 
+"""
     for e in edge_data:
         src=e[0]
         dst=e[1]
@@ -78,9 +89,9 @@ def make_word_map(word):
         if node['id'] in tmp_targets:
             node['size']=node_size[node['id']]
 
-
-make_word_map('oasis')
-net.show('test.html')
+"""
+make_word_map('올림픽')
+#net.show('test.html')
 
 
 
