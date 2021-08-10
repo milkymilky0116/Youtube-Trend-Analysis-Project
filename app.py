@@ -10,10 +10,10 @@ app.jinja_env.filters['quote_plus'] = lambda u: quote_plus(u)
 @app.route('/')
 def index():
     df = mariadb_data.get_youtube_data(
-        50, 'video_id', 'video_title', 'thumbnail_link')
-    df_img = df['thumbnail_link']
-    df_link = df['video_id']
-    df_title = df['video_title']
+        50, 'video_info_link', 'video_info_thumbnails', 'video_info_title')
+    df_img = df['video_info_thumbnails']
+    df_link = df['video_info_link']
+    df_title = df['video_info_title']
     df_img = df_img.values.tolist()
     df_img = mariadb_data.convert_resolution('hq', df_img)
     df_link = mariadb_data.convert_link(df_link)

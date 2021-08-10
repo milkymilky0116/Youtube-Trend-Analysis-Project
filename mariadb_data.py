@@ -33,7 +33,7 @@ def get_youtube_data(query_num,*args):
         elements.append(i)
     
     query=','.join(elements)
-    select_query=''.join("SELECT {} FROM youtube_tmp_data".format(query))
+    select_query=''.join("SELECT {} FROM youtube_test_data".format(query))
     cur.execute(select_query)
     if query_num=='all':
         result_set=cur.fetchall()

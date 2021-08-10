@@ -95,7 +95,7 @@ def make_word_map(word):
             node['size']=node_size[node['id']]
 
 """
-make_word_map('동물')
+
 #net.show('test.html')
 
 

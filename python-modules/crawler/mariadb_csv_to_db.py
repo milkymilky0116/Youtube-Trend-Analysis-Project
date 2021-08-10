@@ -1,6 +1,7 @@
 import pymysql
 import csv
 import requests
+import time
 def db_save(csvfile):
     conn=None
     cur=None
@@ -15,21 +16,25 @@ def db_save(csvfile):
     f=open(csvfile,'r', encoding='utf-8')
     csvReader=csv.reader(f)
 
+    """
+    title,link,keywords,summary,views,thumbnails,channel_name,channel_id,publish_date,description
+    """
+
+
+
     #sql문 테이블 생성
-    sql="""CREATE TABLE IF NOT EXISTS youtube_test_data(video_id char(12) NOT NULL, 
-            video_title varchar(100) NOT NULL, 
-            publish_time char(20) NOT NULL, 
-            channel_id char(30) NOT NULL, 
-            channel_title varchar(100) NOT NULL, 
-            category_id char(10) NOT NULL, 
-            trending_date char(20) NOT NULL ,
-            tags varchar(500) NULL,
-            view_count char(10) NOT NULL,
-            likes_count char(10) NOT NULL,
-            dislikes_count char(10) NOT NULL,
-            comment_count char(20) NOT NULL,
-            thumbnail_link varchar(100) NOT NULL,
-            description varchar(10000) NULL);"""
+    sql="""CREATE TABLE IF NOT EXISTS youtube_test_data(
+            video_info_title varchar(100) NOT NULL,
+            video_info_link varchar(100) NOT NULL,
+            video_info_keywords varchar(500) NULL,
+            video_info_views char(50) NOT NULL,
+            video_info_thumbnails varchar(100) NOT NULL,
+            video_info_author varchar(100) NOT NULL,
+            video_info_channelId varchar(100) NOT NULL,
+            video_info_publish_date char(20) NOT NULL ,
+            video_info_description varchar(10000) NULL,
+            video_info_summary_data varchar(100) NULL
+            );"""
     cur.execute(sql)
 
     #PRIMARY KEY 에러 방지를 위한 AUTO INCREMENT문 실행
@@ -38,24 +43,24 @@ def db_save(csvfile):
 
     #csv Column들을 불러옴
     for row in csvReader:
-        video_id=(row[0])
-        video_title=(row[1])
-        publish_time=(row[2])
-        channel_id=(row[3])
-        channel_title=(row[4])
-        category_id=(row[5])
-        trending_date=(row[6])
-        tags=(row[7])
-        view_count=(row[8])
-        likes_count=(row[9])
-        dislikes_count=(row[10])
-        comment_count=(row[11])
-        thumbnail_link=(row[12])
-        description=(row[15])
+
+        video_info_title=(row[0])
+        video_info_link=(row[1])
+        video_info_keywords=(row[2])
+        video_info_views=(row[3])
+        video_info_thumbnails=(row[4])
+        video_info_author=(row[5])
+        video_info_channelId=(row[6])
+        video_info_publish_date=(row[7])
+        video_info_description=(row[8])
+        video_info_summary_data=(row[9])
+        
         #데이터베이스에 csv의 데이터를 넣는 sql문 실행
-        sql="INSERT INTO youtube_tmp_data(video_id , video_title, publish_time, channel_id, channel_title, category_id, trending_date,tags,view_count,likes_count,dislikes_count,comment_count,thumbnail_link,description) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-        cur.execute(sql,(video_id,video_title,publish_time,channel_id,channel_title,category_id,trending_date,tags,view_count,likes_count,dislikes_count,comment_count,thumbnail_link,description))
+        sql="INSERT INTO youtube_test_data(video_info_title,video_info_link,video_info_keywords,video_info_views,video_info_thumbnails,video_info_author,video_info_channelId,video_info_publish_date,video_info_description,video_info_summary_data) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+        cur.execute(sql,(video_info_title,video_info_link,video_info_keywords,video_info_views,video_info_thumbnails,video_info_author,video_info_channelId,video_info_publish_date,video_info_description,video_info_summary_data))
         conn.commit()
 
     f.close()
     conn.close()
+
+db_save('files/video_data_{}_init.csv'.format(time.strftime('%Y-%m-%d', time.localtime(time.time()))))

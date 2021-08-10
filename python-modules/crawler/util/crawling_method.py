@@ -63,13 +63,19 @@ def scroll_to_bottom(driver):
             break
         last_height = new_height
 def string_int_filtering(text):
-    text_count = re.findall(r'(\d+(?:\.\d+)?)',text)
-    int_count=float(text_count[0])
-    if text.find('만')!=-1:
-        int_count=int_count*10000
-    elif text.find('천')!=-1:
-        int_count=int_count*1000
-    return int(int_count)
+    #text_count ="".join(re.findall(r'(\d+(?:K+)?)',text))
+    try:
+        text_count=text[:text.find(' ')]
+        result=None
+        if 'K' in text_count:
+            place=text_count.find('K')
+            int_part=float(text_count[:place])
+            result=int_part*1000
+            return result
+        else:
+            return int(text_count)
+    except:
+        return 0
 
 def comment_crawler(title_url_list,driver):
     all_comments=[]
