@@ -7,6 +7,8 @@
     --mid-size: 35px;
     --small-size: 20px;
     --micro-size: 10px;
+    --image-width: 300px;
+    --image-height: 200px;
 
 }
 
@@ -17,3 +19,22 @@
     color: var(--font-color);
 }
 
+a {
+    font-size: var(--mid-size);
+    text-decoration-line: none;
+}
+
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+img.masonry-content {
+    width: var(--image-width);
+    height: var(--image-height);
+}
