@@ -14,24 +14,34 @@
 
 /* 첫 화면 */
 * {
-    background-color: var(--background-color);
     font-family: "Raleway", sans-serif;
     color: var(--font-color);
 }
 
+body {
+    background-color: var(--background-color);
+}
+
 a {
-    font-size: var(--mid-size);
+    font-size: var(--small-size);   
+}
+
+a > .mainlogo {
     text-decoration-line: none;
 }
 
 .navbar {
     display: flex;
     justify-content: flex-end;
+    background-color: var(--navbar-color);
 }
 
-.container {
-    display: flex;
-    justify-content: flex-end;
+.navbar > .container {
+    background-color: var(--navbar-color);
+}
+
+.masonry-wrapper {
+    background-color: var(--background-color);
 }
 
 img.masonry-content {

@@ -1,20 +1,21 @@
 from flask import Flask, url_for
+from flask.templating import render_template
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    pass
+    return render_template("index.html")
 
 
 @app.route('/video')
 def video():
-    pass
+    return render_template("video-dump.html")
 
 
 @app.route('/video/<videoid>')
 def detail(videoid):
-    pass
+    return render_template("video-detail.html", value=videoid)
 
 
 with app.test_request_context():

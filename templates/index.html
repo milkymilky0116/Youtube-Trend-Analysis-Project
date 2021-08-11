@@ -1,3 +1,4 @@
+<!-- 홈 화면 -->
 <!doctype html>
 <html>
 
@@ -20,11 +21,13 @@
 <body>
   <nav class="navbar">
     <div class="container">
-      <a href="127.0.0.1:5000"><i class="far fa-lemon"></i> Mangosteen.</a>
+      <a class="mainlogo" href="{{url_for('index')}}"><i class="far fa-lemon"> Mangosteen.</i></a>
       <br>
+      <p class="nav-detail">
       <h2>Explore world with your own interests!</h2>
       <br>
-      <p>망고스틴에서 여러분의 관심사를 토대로 제공되는 서비스를 경험해보세요</p>
+      망고스틴에서 여러분의 관심사를 토대로 제공되는 서비스를 경험해보세요
+      </p>
     </div>
     <!-- 사회날씨 및 핫 키워드 -->
     <div class="container" data-aos="fade-up">
