@@ -5,8 +5,8 @@ import operator
 
 net=Network(height='1200px', width='900px',bgcolor='#222222', font_color='white')
 net.barnes_hut()
-df=pd.read_csv('edge_data.csv')
-model_name='post.embedding'
+df=pd.read_csv('util/edge_data.csv')
+model_name='util/post.embedding'
 model=KeyedVectors.load(model_name)
 
 model_lib=model.wv

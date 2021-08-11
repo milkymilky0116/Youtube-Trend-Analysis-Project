@@ -1,23 +1,24 @@
 import time
 import re
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-from selenium import webdriver as wd
 from selenium.webdriver.common.keys import Keys
-from time import sleep
 import time
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 import re
-import pandas as pd
 from collections import OrderedDict
+from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import CountVectorizer
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from fake_useragent import UserAgent
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from langdetect.lang_detect_exception import LangDetectException
+from langdetect import detect
+from urllib.error import HTTPError
+import urllib.request
+import re
+import json
+import collections
 
 def set_driver_remote():
     chrome_options=webdriver.ChromeOptions()
@@ -77,49 +78,39 @@ def string_int_filtering(text):
     except:
         return 0
 
-def comment_crawler(title_url_list,driver):
-    all_comments=[]
-    for i in range(1,len(title_url_list)):
-        time.sleep(10)
-        driver.get('https://youtube.com'+title_url_list[i])
-        html = driver.find_element_by_tag_name('html')
-
-        driver.execute_script("window.scrollTo(0,500)")
-
-        time.sleep(20)
-
-        #scroll_to_bottom(driver)
-        
-        comment_count=driver.find_element_by_xpath('//*[@id="count"]/yt-formatted-string/span[2]').text
-        comment_count=comment_count.replace(',','')
-        print(comment_count)
-        SCROLL_PAUSE_TIME = 2
-        CYCLES = int(comment_count) * 1/150
-        CYCLES= int(CYCLES)
-        print(CYCLES)
-
-        html.send_keys(Keys.PAGE_DOWN)
-        time.sleep(SCROLL_PAUSE_TIME * 2)
-
-        for i in range(CYCLES):
-            html.send_keys(Keys.END)
-            time.sleep(SCROLL_PAUSE_TIME)
-
-        comment_elems = driver.find_elements_by_xpath('//*[@id="content-text"]')
-        temp=[]
-        for elem in comment_elems:
-            comment=elem.text.replace('\n','').replace('\r','')
-            temp.append(comment)
-            if len(temp)>800:
-                print(len(temp))
+def comment_crawler(driver,url):
+    link='https://youtu.be'+url
+    driver.get(link)
+    all_comment=[]
+    youtube_comments=None
+    i=0
+    j=0
+    while True:
+        html_source = driver.page_source
+        soup = BeautifulSoup(html_source, 'lxml')
+        youtube_comments = soup.select('yt-formatted-string#content-text')
+        if len(youtube_comments)>0:
+            element=driver.find_element_by_tag_name('body')
+            element.send_keys(Keys.END)
+            if i==3:
                 break
-        #all_comments = [elem.text.replace('\n','').replace('\r','') for elem in comment_elems]
-        for i in range(len(temp)):
-            all_comments.append(temp[i])
-    comment_orderd_dict=OrderedDict([
-        ('comment', all_comments)
-    ])
-    return comment_orderd_dict
+            i+=1
+        else:
+            element=driver.find_element_by_tag_name('body')
+            element.send_keys(Keys.END)
+            if j>5:
+                break
+            j+=1
+    if len(youtube_comments)<30:
+        return None
+    else:
+        for i in range(len(youtube_comments)):
+            string=str(youtube_comments[i].text)
+            string = string.replace('\n', '') 
+            string = string.replace('\t', '')
+            if len(all_comment)>30:
+                return all_comment
+            all_comment.append(string)
 
 
 def extract_keywords(key_info,n):
@@ -135,3 +126,97 @@ def extract_keywords(key_info,n):
     keywords=[candidates[index] for index in distance.argsort()[0][-top_n:]]
 
     return keywords
+
+
+
+def sentiment_analyse(sentence_list,client_id,client_secret):
+    if sentence_list==None or len(sentence_list)<10:
+        return None
+    result_sentiment=[]
+    for i in range(len(sentence_list)):
+        sentence=sentence_list[i]
+
+        try:
+            if detect(sentence)=='ko' or detect(sentence)=='en':
+                client_id = client_id
+                client_secret = client_secret
+                url = "https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze";
+                body={
+                        'content':sentence
+                    }
+                body=json.dumps(body)
+                request = urllib.request.Request(url)
+                request.add_header("X-NCP-APIGW-API-KEY-ID",client_id)
+                request.add_header("X-NCP-APIGW-API-KEY",client_secret)
+                request.add_header("Content-Type","application/json")
+                response = urllib.request.urlopen(request, data=body.encode("utf-8"))
+                rescode = response.getcode()
+                if(rescode==200):
+                    response_body = response.read()
+                    text=response_body.decode('utf-8')
+                    text=text[text.find('sentiment'):text.find('confidence')]
+                    sentiment_text= re.sub(r"[^a-zA-Z0-9:]","",text)
+                    sentiment_text=sentiment_text[sentiment_text.find(':')+1:]
+                    result_sentiment.append(sentiment_text)
+                else:
+                    errcode="Error Code:" + rescode
+                    return errcode
+            else:
+                return None
+        except LangDetectException:
+            i+=1
+        except HTTPError:
+            i+=1
+        except:
+            i+=1
+    frequency=collections.Counter(result_sentiment)
+
+    print(frequency)
+    result_dict={}
+    for item in frequency:
+        result_dict[item]=frequency[item]/len(result_sentiment)
+    return result_dict
+
+def vid_info(keyword,driver,tm):
+        #filter_keyword(keyword,driver)
+        search_keyword="%23"+keyword
+        driver.get('https://www.youtube.com/results?search_query='+search_keyword+'&sp=CAMSBAgCEAE%253D')
+        j=1
+        video_info_link=[]
+        get_info_avaliable=True
+        while True:
+            page=driver.page_source
+            soup=BeautifulSoup(page,'lxml')
+            all_video_sections=soup.select("#contents > ytd-item-section-renderer:nth-of-type({})".format(j))
+            video_len=None
+            for child in all_video_sections:
+                all_videos=child.find_all(id='dismissible')
+                section_views=[]
+                for video in all_videos:
+                    video_len=len(all_videos)
+                    video_info=video.find(id='video-title')
+                    href=video_info.attrs['href']
+                    view=[i.text for i in video.select('#metadata-line > span:nth-of-type(1)')][0]
+                    view=string_int_filtering(view)
+                    if view>1000:
+                        video_info_link.append(href)
+                        print(href)
+                        section_views.append(view)
+                    #prev_view_avg=sum(section_views)/len(section_views)
+                if len(section_views)>3:
+                    #driver.execute_script("window.scrollTo(0, 800*{});".format(video_len*2))
+                    element=driver.find_element_by_tag_name('body')
+                    element.send_keys(Keys.END)
+                    j=j+1
+                    time.sleep(1)
+                else:
+                    get_info_avaliable=False
+                    with open('files/dataset_init_{}.txt'.format(tm),'a',encoding='utf-8') as f:
+                        for line in video_info_link:
+                            f.write(line)
+                            f.write('\n')
+                    break   
+            if get_info_avaliable==False:
+                break
+        return video_info_link
+    

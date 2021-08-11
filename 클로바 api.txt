@@ -1,0 +1,4 @@
+clova sentiment
+
+client_id = "zofo3v8hwj"
+client_secret = "uSaxHZaefo6WTQ2rwcdNJqVGnngg3QkjA10dvEw9"

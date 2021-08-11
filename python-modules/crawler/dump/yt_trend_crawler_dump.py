@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import time
 
 from selenium.webdriver.common.action_chains import ActionChains
-from util.crawling_method import set_driver_remote, string_int_filtering, extract_keywords
+from util.crawling_method import set_driver_remote, string_int_filtering, extract_keywords, comment_crawler, sentiment_analyse
 from selenium.webdriver.common.keys import Keys
 import pandas as pd
 
@@ -80,16 +80,18 @@ def multiple_keyword_search(args):
     video_info_publish_date=[]
     video_info_author=[]
     video_info_summary_data=[]
+    video_info_sentiment=[]
 
 
     print("="*50)
     print("Stage 1: Collecting Data")
     print("="*50)
 
+    driver=set_driver_remote()
+
     for i in range(len(args)):
         keyword_list=make_word_map(args[i])
         #driver=webdriver.Chrome('driver/chromedriver.exe')
-        driver=set_driver_remote()
         for i in range(len(keyword_list)):
             vid_info(keyword_list[i],driver)
             print("complete:",keyword_list[i])
@@ -105,14 +107,6 @@ def multiple_keyword_search(args):
     print("="*50)
 
     start=time.time()
-    prev_data=None
-    """
-    prev_data_link=None
-    if os.path.exists('files/dataset_init_{}.txt'.format(time.strftime('%Y-%m-%d', time.localtime(time.time())))):
-        prev_data=pd.read_csv('files/dataset_init_{}.txt'.format(time.strftime('%Y-%m-%d', time.localtime(time.time()))))
-        prev_data_link=prev_data['link']
-    """
-
         
 
     with open('files/dataset_init_{}.txt'.format(time.strftime('%Y-%m-%d', time.localtime(time.time()))),'rt',encoding='utf-8') as f:
@@ -141,7 +135,7 @@ def multiple_keyword_search(args):
     print((end-start)/60)
 
     print("="*50)
-    print("Stage 3: Analyse Data")
+    print("Stage 3: Summary Data")
     print("="*50)
 
     start=time.time()
@@ -167,6 +161,28 @@ def multiple_keyword_search(args):
 
     print(end-start)
 
+
+
+    print("="*50)
+    print("Stage 3: Comment Sentiment Analysis")
+    print("="*50)
+
+    driver=set_driver_remote()
+    #driver=webdriver.Chrome('driver/chromedriver.exe')
+    for i in range(len(video_info_link)):
+
+        print('Title:',video_info_title[i])
+
+        comment_list=comment_crawler(driver,video_info_link[i])
+        print(comment_list)
+        sentiment_list=sentiment_analyse(comment_list)
+        print(sentiment_list)
+        video_info_sentiment.append(sentiment_list)
+
+    print(video_info_sentiment)
+    driver.quit()
+
+
     print("="*50)
     print("Stage 4: Write CSV & Update DB")
     print("="*50)
@@ -183,9 +199,10 @@ def multiple_keyword_search(args):
                     video_info_channelId,
                     video_info_publish_date,
                     video_info_description,
-                    video_info_summary_data)
+                    video_info_summary_data,
+                    video_info_sentiment)
     
-    df=pd.DataFrame(video_data, columns=['video_info_title','video_info_link','video_info_keywords','video_info_views','video_info_thumbnails','video_info_author','video_info_channelId','video_info_publish_date','video_info_description','video_info_summary_data'])
+    df=pd.DataFrame(video_data, columns=['video_info_title','video_info_link','video_info_keywords','video_info_views','video_info_thumbnails','video_info_author','video_info_channelId','video_info_publish_date','video_info_description','video_info_summary_data','video_info_sentiment'])
     df.head(5)
     if not os.path.exists('files/video_data_{}_init.csv'.format(time.strftime('%Y-%m-%d', time.localtime(time.time())))):
         #새로 파일 작성
@@ -201,7 +218,8 @@ def multiple_keyword_search(args):
     end=time.time()
     print((end-start)/60)
 
-keyword_list=['강아지','뉴스','여행']
+#keyword_list=['강아지','뉴스','여행','예능','shorts']
+keyword_list=['강아지','뉴스','여행','예능','shorts']
 
 
 multiple_keyword_search(keyword_list)
