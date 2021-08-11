@@ -5,7 +5,6 @@ from selenium.webdriver.common.keys import Keys
 import time
 from selenium import webdriver
 import re
-from collections import OrderedDict
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import CountVectorizer
 from sentence_transformers import SentenceTransformer
@@ -19,6 +18,7 @@ import urllib.request
 import re
 import json
 import collections
+from googleapiclient.discovery import build
 
 def set_driver_remote():
     chrome_options=webdriver.ChromeOptions()
@@ -77,7 +77,7 @@ def string_int_filtering(text):
             return int(text_count)
     except:
         return 0
-
+"""
 def comment_crawler(driver,url):
     link='https://youtu.be'+url
     driver.get(link)
@@ -111,7 +111,37 @@ def comment_crawler(driver,url):
             if len(all_comment)>30:
                 return all_comment
             all_comment.append(string)
+"""
+def comment_crawler(api_key,video_link):
+    try:
+        youtube = build('youtube', 'v3',developerKey=api_key)
 
+        #/watch?v=hEqJLnEWVKk
+
+        video_link=video_link[video_link.find("=")+1:]
+
+        video_id=video_link
+    
+        video_response=youtube.commentThreads().list(
+        part='snippet',
+        videoId=video_id,
+        maxResults=30
+        ).execute()
+        result=[]
+        while True:
+            for item in video_response['items']:
+                comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
+                cleaner=re.compile('<.*?>')
+                comment=re.sub(cleaner,'',comment)         
+                result.append(comment)
+            if len(video_response['items'])<30:
+                if len(result)==len(video_response['items']):
+                    break
+            if len(result)==30:
+                break
+        return result
+    except:
+        return None
 
 def extract_keywords(key_info,n):
     ngram_range=(1,1)

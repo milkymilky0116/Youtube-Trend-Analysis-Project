@@ -1,48 +1,36 @@
-import requests
-from selenium import webdriver as wd
-
-from selenium import webdriver
-
-import csv
-import pandas as pd
-import time
-import os
+from googleapiclient.discovery import build
 import re
-import json
-import collections
-from langdetect import detect
 
-text='{"document":{"sentiment":"positive","confidence":{"negative":0.042479347,"positive":99.95143,"neutral":0.0060882084}},"sentences":[{"content":"사랑해요","offset":0,"length":4,"sentiment":"positive","confidence":{"negative":0.002548761,"positive":0.997086,"neutral":3.652925E-4},"highlights":[{"offset":0,"length":4}]}]}'
-text=text[text.find('sentiment'):text.find('confidence')]
-print(text)
-new_string = re.sub(r"[^a-zA-Z0-9:]"," ",text)
-print(new_string)
+def comment_crawler(api_key,video_link):
+    youtube = build('youtube', 'v3',developerKey=api_key)
 
-body={
-    'content':'사랑합니다'
-}
+    #/watch?v=hEqJLnEWVKk
 
-jsonString=json.dumps(body)
+    video_link=video_link[video_link.find("=")+1:]
 
-print(jsonString)
+    video_id=video_link
+  
+    video_response=youtube.commentThreads().list(
+    part='snippet',
+    videoId=video_id,
+    maxResults=30
+    ).execute()
+    result=[]
 
-sentence="what's your hobby"
-print(detect(sentence)=='en')
+ 
+    while True:
+        for item in video_response['items']:
+            comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
+            cleaner=re.compile('<.*?>')
+            comment=re.sub(cleaner,'',comment)         
+            result.append(comment)
+        if len(video_response['items'])<30:
+            if len(result)==len(video_response['items']):
+                break
+        if len(result)==30:
+            break
+    return result
 
-sentiment_list=['positive','positive','negative','positive','netural']
-frquency=collections.Counter(sentiment_list)
-
-list1=[1,2,3]
-list2=[4,5,6]
-
-list=zip(list1,list2)
-
-df=pd.DataFrame(list,columns=[1,2])
-print(df[1])
-
-print(time.localtime(time.time()))
-
-print(time.strftime('%Y-%m-%d %I:%M:%S %p', time.localtime(time.time())))
-
+print(comment_crawler('AIzaSyA8AVDeWVW2aEqMds7z51gjhr8o3ebRyik','/watch?v=hz3GqFqxyzk'))
 
 

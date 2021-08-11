@@ -7,9 +7,10 @@ import pandas as pd
 
 from pytube import YouTube
 from util.vis_word_map import make_word_map
+from sqlalchemy import create_engine
 
 class Youtube_Crawler:
-    def __init__(self,keywords,client_id,client_secret):
+    def __init__(self,keywords,client_id,client_secret,google_api):
         self.video_info_title=[]
         self.video_info_link=[]
         self.video_info_keywords=[]
@@ -28,14 +29,18 @@ class Youtube_Crawler:
         self.__client_id=client_id
         self.__client_secret=client_secret
 
+        self.__google_api=google_api
+
         self.keywords=keywords
 
-        self.tm=time.strftime('%Y-%m-%d-%I-%M-%S-%p', time.localtime(time.time()))
+        self.tm=time.strftime('%Y-%m-%d-%I %M-%S-%p', time.localtime(time.time()))
         
         self.crawling()
     
     def get_client_id(self):
         return self.__client_id
+    def get_google_api_key(self):
+        return self.__google_api
 
     def get_client_secret(self):
         return self.__client_secret
@@ -60,7 +65,6 @@ class Youtube_Crawler:
         print((end-start)/60)
     def parsing_data(self):
         start=time.time()
-
         with open('files/dataset_init_{}.txt'.format(self.tm),'rt',encoding='utf-8') as f:
             links=f.readlines()
             for link in links:
@@ -107,17 +111,18 @@ class Youtube_Crawler:
     def comment_analysis(self,driver):
         self.id=self.get_client_id()
         self.key=self.get_client_secret()
+        self.api=self.get_google_api_key()
         for i in range(len(self.video_info_link)):
 
             print('Title:',self.video_info_title[i])
 
-            comment_list=comment_crawler(driver,self.video_info_link[i])
+            #comment_list=comment_crawler(driver,self.video_info_link[i])
+            comment_list=comment_crawler(self.api,self.video_info_link[i])
             print(comment_list)
             sentiment_list=sentiment_analyse(comment_list,self.id,self.key)
             print(sentiment_list)
-            self.video_info_sentiment.append(sentiment_list)
-        print(self.video_info_sentiment)
-        driver.quit()
+            self.video_info_sentiment.append(str(sentiment_list))
+        #driver.quit()
 
 
     def save_df(self):
@@ -135,21 +140,23 @@ class Youtube_Crawler:
             self.video_info_sentiment,
         )
         self.video_dataframe=pd.DataFrame(self.video_data, columns=[
-            'video_info_title',
-            'video_info_link',
-            'video_info_keywords',
-            'video_info_views',
-            'video_info_thumbnails',
-            'video_info_author',
-            'video_info_channelId',
-            'video_info_publish_date',
-            'video_info_description',
-            'video_info_summary_data',
-            'video_info_sentiment'])
+            "video_info_title",
+            "video_info_link",
+            "video_info_keywords",
+            "video_info_views",
+            "video_info_thumbnails",
+            "video_info_channelId",
+            "video_info_description",
+            "video_info_publish_date",
+            "video_info_author",
+            "video_info_summary_data",
+            "video_info_sentiment"])
         return self.video_dataframe
 
     def save_df_to_db(self,ip,port,user,pw,db_name):
-        self.save_df()
+        self.video_dataframe=self.save_df()
+
+        print(self.video_dataframe)
 
         conn=None
         cur=None
@@ -165,7 +172,8 @@ class Youtube_Crawler:
         df=self.get_video_dataframe()
         
         #sql문 테이블 생성
-        sql="""CREATE TABLE IF NOT EXISTS youtube_test_data(
+        """
+        sql="CREATE TABLE IF NOT EXISTS youtube_test_data(
                 video_info_title varchar(100) NOT NULL,
                 video_info_link varchar(100) NOT NULL,
                 video_info_keywords varchar(500) NULL,
@@ -177,58 +185,19 @@ class Youtube_Crawler:
                 video_info_description varchar(10000) NULL,
                 video_info_summary_data varchar(100) NULL,
                 video_info_sentiment varchar(10) NULL
-                );"""
+                );"
         cur.execute(sql)
 
         #PRIMARY KEY 에러 방지를 위한 AUTO INCREMENT문 실행
-        sql="ALTER TABLE youtube_tmp_data AUTO_INCREMENT = 1;"
+        sql="ALTER TABLE youtube_test_data AUTO_INCREMENT = 1;"
         cur.execute(sql)
+        """
+        engine=create_engine('mysql+mysqlconnector://root:sjlee3423@110.165.16.124:30141/Youtube_Trend_Server')
 
-        #csv Column들을 불러옴
-
-
-        video_info_title=df['video_info_title']
-        video_info_link=df['video_info_link']
-        video_info_keywords=df['video_info_keywords']
-        video_info_views=df['video_info_views']
-        video_info_thumbnails=df['video_info_thumbnails']
-        video_info_author=df['video_info_author']
-        video_info_channelId=df['video_info_channelId']
-        video_info_publish_date=df['video_info_publish_date']
-        video_info_description=df['video_info_description']
-        video_info_summary_data=df['video_info_summary_data']
-        video_info_sentiment=df['video_info_sentiment']
-            
-            #데이터베이스에 csv의 데이터를 넣는 sql문 실행
-        sql="""INSERT INTO youtube_test_data(
-            video_info_title,
-            video_info_link,
-            video_info_keywords,
-            video_info_views,
-            video_info_thumbnails,
-            video_info_author,
-            video_info_channelId,
-            video_info_publish_date,
-            video_info_description,
-            video_info_summary_data,
-            video_info_sentiment) 
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"""
-        cur.execute(sql,(
-            video_info_title,
-            video_info_link,
-            video_info_keywords,
-            video_info_views,
-            video_info_thumbnails,
-            video_info_author,
-            video_info_channelId,
-            video_info_publish_date,
-            video_info_description,
-            video_info_summary_data,
-            video_info_sentiment))
-        conn.commit()
-        conn.close()
+        df.to_sql(name='youtube_test_data',con=engine,index=False)
 
     def crawling(self):
+
         print("="*50)
         print("Stage 1: Collecting Data")
         print("="*50)
@@ -248,8 +217,9 @@ class Youtube_Crawler:
         print("="*50)
         print("Stage 4: Comment Sentiment Analysis")
         print("="*50)
-        driver=self.set_driver('server')
+        #driver=self.set_driver('server')
         self.comment_analysis(driver)
+        
 
         print("="*50)
         print("Stage 5: Save Data to Maria DB")
@@ -257,5 +227,5 @@ class Youtube_Crawler:
         self.save_df_to_db("110.165.16.124",30141,'root','sjlee3423','Youtube_Trend_Server')
 
 if __name__=="__main__":
-    keyword_list=['강아지']
-    Youtube_Crawler(keyword_list,"zofo3v8hwj","uSaxHZaefo6WTQ2rwcdNJqVGnngg3QkjA10dvEw9")
+    keyword_list=['여행']
+    Youtube_Crawler(keyword_list,"zofo3v8hwj","uSaxHZaefo6WTQ2rwcdNJqVGnngg3QkjA10dvEw9","AIzaSyA8AVDeWVW2aEqMds7z51gjhr8o3ebRyik")
