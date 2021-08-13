@@ -22,8 +22,8 @@ RUN apt-get install -y tzdata
 ADD . /app
 WORKDIR /app
 
-COPY requirements_yt.txt ./requirements_yt.txt
-RUN pip3 install -r requirements_yt.txt
+COPY requirements.txt ./requirements.txt
+RUN pip3 install -r requirements.txt
 
 COPY yt_trend_crawler.py ./yt_trend_crawler.py
 

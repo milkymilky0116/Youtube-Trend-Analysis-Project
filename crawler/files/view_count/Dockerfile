@@ -22,7 +22,9 @@ RUN apt-get install -y tzdata
 ADD . /app
 WORKDIR /app
 
-COPY requirements.txt ./requirements.txt
+COPY requirements.txt /app/server/
+
+WORKDIR /app/server/
 RUN pip3 install -r requirements.txt
 
 COPY view_count.py ./view_count.py
