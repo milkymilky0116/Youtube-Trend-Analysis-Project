@@ -2,13 +2,18 @@
 :root {
     --background-color: #ffd54f;
     --navbar-color: #ffab00;
+    --info-color: #ffc046;
+    --btn-color: #ff6f00;
     --font-color: #0d1e2d;
     --big-size: 50px;
-    --mid-size: 35px;
+    --mid-size: 30px;
     --small-size: 20px;
     --micro-size: 10px;
-    --image-width: 300px;
+    --image-width: 200px;
     --image-height: 200px;
+    --padding-size: 12px;
+    --margin-size: 42px;
+    --box-size: 250px;
 
 }
 
@@ -22,8 +27,13 @@ body {
     background-color: var(--background-color);
 }
 
+.container {
+    padding: 0;
+}
+
 a {
-    font-size: var(--small-size);   
+    font-size: var(--mid-size); 
+    padding-top: var(--margin-size);  
 }
 
 a > .mainlogo {
@@ -31,20 +41,79 @@ a > .mainlogo {
 }
 
 .navbar {
-    display: flex;
-    justify-content: flex-end;
     background-color: var(--navbar-color);
+}
+
+.nav-detail {
+    background-color: var(--navbar-color);
+    padding: var(--padding-size);
+    margin-left: var(--margin-size);
+    font-size: var(--small-size);
 }
 
 .navbar > .container {
     background-color: var(--navbar-color);
+    align-items: center;
+    margin-left: var(--margin-size);
+}
+
+.todayInfo {
+    background-color: var(--background-color);
+    background-attachment: scroll;
+    padding: var(--margin-size);
+    justify-content:flex-start;
+    position: fixed;
+    width: 30%;
+    height: 100%;
+}
+
+.todayInfo > .keyword > ul {
+    padding: 0;
+}
+
+.todayInfo > .keyword > ul > button {
+    border-style: none;
+    margin: 5px;
+}
+
+input#search-box {
+    border: none;
+}
+
+.todayInfo > .search-bar > #submit-btn {
+    border-style: none;
+    margin-top: 5px;
+}
+
+.masonry-wrapper > h3 {
+    padding-bottom: var(--padding-size);
 }
 
 .masonry-wrapper {
+    margin-left: 30%;
+    padding: var(--margin-size);
     background-color: var(--background-color);
+}
+
+.masonry-wrapper > .masonry > .masonry-item >.col-sm {
+    font-size: var(--mid-size);
+}
+
+.masonry-wrapper > .masonry > .masonry-item {
+    margin: var(--margin-size);
+}
+
+.masonry-wrapper > .masonry > .masonry-item > .row {
+    margin-top: var(--margin-size);
 }
 
 img.masonry-content {
     width: var(--image-width);
     height: var(--image-height);
+    padding-top: var(--padding-size);
+}
+
+.masonry-wrapper > .masonry {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }

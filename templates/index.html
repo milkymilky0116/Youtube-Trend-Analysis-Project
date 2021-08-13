@@ -22,42 +22,54 @@
   <nav class="navbar">
     <div class="container">
       <a class="mainlogo" href="{{url_for('index')}}"><i class="far fa-lemon"> Mangosteen.</i></a>
+    </div>
+    <!-- 기본 안내 문구 -->
+    <div class="nav-detail">
+      Explore world with your own interests!
       <br>
-      <p class="nav-detail">
-      <h2>Explore world with your own interests!</h2>
-      <br>
-      망고스틴에서 여러분의 관심사를 토대로 제공되는 서비스를 경험해보세요
+      망고스틴에서 여러분의 관심사를 토대로 제공되는 서비스를 경험해보세요!
+    </div>
+  </nav>
+
+
+  <!-- 사회날씨 및 핫 키워드 -->
+  <div class="todayInfo">
+    <div class="weather">
+      <h5>Today's Social Weather</h5>
+      <p id="social-weather"><i class="fas fa-sun"></i>맑음</p>
+    </div>
+    <div class="keyword">
+      <h5>Today's Hot Keywords</h5>
+      <p id="keyword">
+      <ul>
+        <button id="keyword1">코로나</button>
+        <button id="keyword2">백신</button>
+        <button id="keyword3">빠니보틀</button>
+        <button id="keyword4">곽튜브</button>
+        <button id="keyword5">여행</button>
+      </ul>
       </p>
     </div>
-    <!-- 사회날씨 및 핫 키워드 -->
-    <div class="container" data-aos="fade-up">
-      <div class="todayInfo">
-        <div class="weather">
-          <h5>Today's Social Weather</h5>
-          <p id="social-weather">사회날씨 나타나는 부분</p>
-          <div class="keyword">
-            <h5>Today's Hot Keywords</h5>
-            <p id="keyword">핫 키워드 나타나는 부분</p>
-            <!--search bar -->
-            <div class="search-bar">
-              <input type="text" id="search-box" placeholder="다양한 키워드를 검색해보세요!">
-              <button type="submit" id="submit-btn"><i class="fas fa-search"></i></button>
-            </div>
-          </div>
-        </div>
-  </nav>
+    <!--search bar -->
+    <div class="search-bar">
+      <input type="text" id="search-box" placeholder="키워드 검색">
+      <button type="submit" id="submit-btn"><i class="fas fa-search"></i></button>
+    </div>
+  </div>
+
 
   <!-- 동영상 블럭 -->
   <div class="masonry-wrapper">
+    <h3>Today's ranking</h3>
     <div class="masonry">
       {%for img in img_data%}
       {%set url= img%}
       <div class="masonry-item">
+        <div class="col-sm">
+          <span class="badge bg-primary">#{{loop.index}}</span>
+        </div>
         <img src="{{url}}" class="masonry-content">
         <div class="row">
-          <div class="col-sm-3">
-            <span class="badge bg-primary">#{{loop.index}}</span>
-          </div>
           <div class="col-md-6">
             {{title_data[loop.index-1]}}
           </div>
