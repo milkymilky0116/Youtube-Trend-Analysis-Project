@@ -1,0 +1,14 @@
+version '3.4'
+
+services:
+  youtube_trend_crawler:
+    image: youtube_trend_crawler
+  view_count:
+    image: view_count
+    container_name: youtube_crawler
+  volumes:
+      - ./entrypoint.sh:/usr/sbin/entrypoint.sh
+      - ./cron/:/etc/cron.d/
+      - ./files/:/root/files/
+  restart: on-faliure
+
