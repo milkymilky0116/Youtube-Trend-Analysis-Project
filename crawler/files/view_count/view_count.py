@@ -12,7 +12,7 @@ import pandas as pd
 def main():
     tm=time.strftime('%Y-%m-%d %I:%M %p', time.localtime(time.time()))
     start=time.time()
-    conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
+    conn=pymysql.connect(host="host",port='', user='', password='', db='', charset='')
     cur=conn.cursor()
     sql="SELECT video_info_link FROM youtube_test_data"
     cur.execute(sql)
@@ -38,7 +38,7 @@ def main():
  
     data=zip(date_result,link_result,result)
     df=pd.DataFrame(data,columns=['date','link','views'])
-    engine=create_engine('mysql+mysqlconnector://root:sjlee3423@110.165.16.124:30141/Youtube_Trend_Server')
+    engine=create_engine('mysql+mysqlconnector://user:pw@host:port/db_name?charset=utf8mb4')
     df.to_sql(name='youtube_view_data',con=engine,if_exists='append',index=False)
     end=time.time()
     print(end-start)
