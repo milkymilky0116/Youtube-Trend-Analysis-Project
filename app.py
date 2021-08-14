@@ -30,7 +30,6 @@ def ajax():
 
     line_chart_dict,pie_chart_dict=mariadb_data.get_analysis_data(data)
     print(line_chart_dict)
-
     print(pie_chart_dict)
 
     return jsonify(view_result=line_chart_dict, sentiment_result=pie_chart_dict)
