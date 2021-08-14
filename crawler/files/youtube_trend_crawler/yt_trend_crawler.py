@@ -213,9 +213,8 @@ class Youtube_Crawler:
             if isinstance(comment_list,list):
                 comment_data=",".join(comment_list)
             print(comment_data)
-            self.video_info_comment.append(comment_data)
-            sentiment_list,sentiment_result,sentiment_value=sentiment_analyse(comment_list,self.id,self.key)
-            print(sentiment_list)
+            sentiment_list,sentiment_result,sentiment_value,comment_sentiment=sentiment_analyse(comment_list,self.id,self.key)
+            self.video_info_comment.append(comment_sentiment)
             self.video_info_sentiment_list.append(str(sentiment_list))
             print(sentiment_result)
             print(sentiment_value)

@@ -17,3 +17,4 @@ PyKomoran
 tweepy
 pyvis
 gensim
+python-twitter

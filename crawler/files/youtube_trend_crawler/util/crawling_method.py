@@ -220,8 +220,9 @@ def keyword_nouns(keywords):
 
 def sentiment_analyse(sentence_list,client_id,client_secret):
     if sentence_list==None or len(sentence_list)<10:
-        return None,None,None
+        return None,None,None,None
     result_sentiment=[]
+    comment_sentiment={}
     for i in range(len(sentence_list)):
         sentence=sentence_list[i]
         try:
@@ -245,12 +246,13 @@ def sentiment_analyse(sentence_list,client_id,client_secret):
                     text=text[text.find('sentiment'):text.find('confidence')]
                     sentiment_text= re.sub(r"[^a-zA-Z0-9:]","",text)
                     sentiment_text=sentiment_text[sentiment_text.find(':')+1:]
+                    comment_sentiment[sentence]=sentiment_text
                     result_sentiment.append(sentiment_text)
                 else:
                     errcode="Error Code:" + rescode
                     return errcode
             else:
-                return None,None,None
+                return None,None,None,None
         except LangDetectException:
             i+=1
         except HTTPError:
@@ -260,6 +262,8 @@ def sentiment_analyse(sentence_list,client_id,client_secret):
     frequency=collections.Counter(result_sentiment)
     sentiment_result=frequency.most_common(3)[0][0]
     sentiment_value=0
+
+    print(comment_sentiment)
 
     result_dict={}
     for item in frequency:

@@ -1,8 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,jsonify,request
 import mariadb_data
 from urllib.parse import quote_plus
 import pandas as pd
-import requests
+import pymysql
+import ast
 app = Flask(__name__)
 app.jinja_env.filters['quote_plus'] = lambda u: quote_plus(u)
 
@@ -16,10 +17,23 @@ def index():
     df_title = df['video_info_title']
     df_img = df_img.values.tolist()
     df_img = mariadb_data.convert_resolution('hq', df_img)
-    df_link = mariadb_data.convert_link(df_link)
+    df_id=mariadb_data.convert_id(df_link)
+    #df_link = mariadb_data.convert_link(df_link)
 
-    return render_template('index.html', img_data=df_img, link_data=df_link, title_data=df_title)
+    return render_template('index.html', img_data=df_img, link_data=df_link, title_data=df_title, id_data=df_id)
 
+@app.route('/ajax', methods=['POST'])
+def ajax():
+    data = request.get_json()
+    dict={}
+    dict2={}
+
+    line_chart_dict,pie_chart_dict=mariadb_data.get_analysis_data(data)
+    print(line_chart_dict)
+
+    print(pie_chart_dict)
+
+    return jsonify(view_result=line_chart_dict, sentiment_result=pie_chart_dict)
 
 if __name__ == "__main__":
     app.run()
