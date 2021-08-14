@@ -26,6 +26,7 @@
 
 body {
     background-color: var(--background-color);
+    height: 0;
 }
 
 .container {
@@ -81,7 +82,7 @@ i.far.fa-lemon {
 
 .todayInfo > .keyword > ul > button {
     border-style: none;
-    margin: 5px;
+    margin-right: 5px;
 }
 
 input#search-box {
@@ -106,10 +107,9 @@ input#search-box {
 .masonry-wrapper > .masonry {
     width: 1000px;
     height: 100%;
-}
-
-.masonry-wrapper > .masonry > .masonry-item {
-    height: 500px;
+    display: grid;
+    grid-template-columns: 300px 300px 300px;
+    grid-template-rows: 300px 300px 300px;
 }
 
 .masonry-wrapper > .masonry > .masonry-item >.col-sm {
@@ -119,23 +119,22 @@ input#search-box {
 .masonry-wrapper > .masonry > .masonry-item {
     margin-left: 0;
     margin-bottom: var(--margin-size);
-    width: var(--image-width);
-    height: var(--image-height);
+
 }
 
 .masonry-wrapper > .masonry > .masonry-item > .row {
     margin-top: var(--margin-size);
 }
 
-.masonry-wrapper > .masonry >img.masonry-content {
-    width: 100px;
-    height: 100px;
+img.masonry-content {
+    width: var(--image-width);
+    height: var(--image-height);
 }
 
-
-.masonry-wrapper > .masonry {
+.masonry-wrapper > .masonrys {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: max-content;
 }
 
 .footer > .container {
