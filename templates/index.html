@@ -61,6 +61,7 @@
   <!-- 동영상 블럭 -->
   <div class="masonry-wrapper">
     <h3>Today's ranking</h3>
+    <h5>(be updated every hour!)</h5>
     <div class="masonry">
       {%for img in img_data%}
       {%set url= img%}
@@ -70,7 +71,7 @@
         </div>
         <img src="{{url}}" class="masonry-content">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm">
             {{title_data[loop.index-1]}}
           </div>
         </div>
@@ -88,8 +89,8 @@
     <footer class="footer" role="contentinfo">
       <div class="container">
         <div class="row">
-          <div class="col-sm-6">
-            <p class="mb-1">&copy; Copyright Mangosteen.
+          <div class="col-sm">
+            <p class="mb">&copy; Copyright Mangosteen.
               <br>
               All Rights Reserved
             </p>

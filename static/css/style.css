@@ -21,6 +21,7 @@
 * {
     font-family: "Raleway", sans-serif;
     color: var(--font-color);
+    background-color: var(--background-color);
 }
 
 body {
@@ -32,12 +33,18 @@ body {
 }
 
 a {
+    background-color: var(--navbar-color);
     font-size: var(--mid-size); 
     padding-top: var(--margin-size);  
 }
 
 a > .mainlogo {
+    background-color: var(--navbar-color);
     text-decoration-line: none;
+}
+
+i.far.fa-lemon {
+    background-color: var(--navbar-color);
 }
 
 .navbar {
@@ -67,6 +74,7 @@ a > .mainlogo {
     height: 100%;
 }
 
+
 .todayInfo > .keyword > ul {
     padding: 0;
 }
@@ -95,25 +103,47 @@ input#search-box {
     background-color: var(--background-color);
 }
 
+.masonry-wrapper > .masonry {
+    width: 1000px;
+    height: 100%;
+}
+
+.masonry-wrapper > .masonry > .masonry-item {
+    height: 500px;
+}
+
 .masonry-wrapper > .masonry > .masonry-item >.col-sm {
     font-size: var(--mid-size);
 }
 
 .masonry-wrapper > .masonry > .masonry-item {
-    margin: var(--margin-size);
+    margin-left: 0;
+    margin-bottom: var(--margin-size);
+    width: var(--image-width);
+    height: var(--image-height);
 }
 
 .masonry-wrapper > .masonry > .masonry-item > .row {
     margin-top: var(--margin-size);
 }
 
-img.masonry-content {
-    width: var(--image-width);
-    height: var(--image-height);
-    padding-top: var(--padding-size);
+.masonry-wrapper > .masonry >img.masonry-content {
+    width: 100px;
+    height: 100px;
 }
+
 
 .masonry-wrapper > .masonry {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+}
+
+.footer > .container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
+}
+
+.footer > .container > .row {
+    margin: 0;
 }
