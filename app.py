@@ -31,7 +31,7 @@ def show_result():
     print(pie_chart_dict)
 
     return jsonify(view_result=line_chart_dict, sentiment_result=pie_chart_dict)
-@app.route('/show',methods=['POST'])
+@app.route('/show_related',methods=['POST'])
 def show_related():
     data=request.get_json()
     result={}
@@ -41,6 +41,15 @@ def show_related():
         result['result']=['검색결과가 존재하지 않습니다.']
     
     return jsonify(search_result=result)
+
+@app.route('/show_video_query',methods=['POST'])
+def show_video_query():
+    data=request.get_json()
+    print(data)
+    result=mariadb_data.get_query_data(data['value'])
+    print(result)
+    return jsonify(query_result=result)
+
 
 if __name__ == "__main__":
     app.run()

@@ -157,6 +157,16 @@
           }
         show_video_result(analysis_data);
       })
+
+      $(document).on("click", '#result-button', function(event) { 
+          var query_value=$(this).attr('value')
+          console.log(query_value)
+          var query_data={
+            'value':query_value
+          }
+          //show_query_result(query_data)
+      });
+
       $(".modal").on("hidden.bs.modal",function(){
         $(".Youtube-container").empty();
         $(".modal-title").empty();
@@ -201,11 +211,28 @@
           })
       }
 
+      function show_query_result(value){
+        $.ajax({
+              type: 'POST',
+              url: '{{url_for("show_video_query")}}',
+              data: JSON.stringify(value),
+              dataType : 'JSON',
+              contentType: "application/json",
+              success: function(response){
+                  show_query(response)
+              },
+              error: function(request, status, error){
+                  alert('ajax 통신 실패')
+                  alert(error);
+              }
+          })
+      }
+
 
       function show_search_list(data){
         var length=data.search_result['result'].length
         for (i=0; i<length; i++){
-          $(".keyword_list").append('<a class="list-group-item list-group-item-action">'+data.search_result['result'][i]+'</a>')
+          $(".keyword_list").append('<a id=result-button class="list-group-item list-group-item-action value="'+data.search_result['result'][i]+'">'+data.search_result['result'][i]+'</a>')
         }
       }
 
@@ -250,6 +277,10 @@
         console.log(link)
         $(".Youtube-container").append(link)
         $(".modal-title").append(data.view_result['title'])
+      }
+
+      function show_query(data){
+        console.log('success')
       }
 
     </script>
