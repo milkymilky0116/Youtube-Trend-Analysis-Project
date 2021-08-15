@@ -44,6 +44,7 @@ def get_analysis_data(data):
     cur.execute(sql,link)
     result=cur.fetchall()
     result=result[len(result)-5:]
+    print(result)
     view_date=[]
     view_rate=[]
     for i in range(len(result)):
@@ -81,14 +82,6 @@ def get_analysis_data(data):
     pie_chart_dict['rate']=sentiment_rate
 
     return line_chart_dict,pie_chart_dict
-
-
-
-
-
-    
-    
-    
 
 
 

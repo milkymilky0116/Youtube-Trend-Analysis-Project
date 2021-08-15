@@ -236,11 +236,11 @@
         var PieChart = new Chart(pie, {
           type: 'doughnut',
           data: {
-            labels: ['negative', 'netural', 'positive'],
+            labels: data.sentiment_result['sentiment'],
             datasets: [{
               data: data.sentiment_result['rate'],
               fill: false,
-              backgroundColor: ['#FE9898', '#F5E79D', '#E5FBB8'],
+              backgroundColor: ['#85D2D0','#FFF4BD','#F4B9B8'],
               hoverOffset: 4
             }]
           },
