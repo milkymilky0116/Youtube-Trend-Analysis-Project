@@ -17,17 +17,11 @@
     href="https://fonts.googleapis.com/css?family=https://fonts.googleapis.com/css?family=Inconsolata:400,500,600,700|Raleway:400,400i,500,500i,600,600i,700,700i"
     rel="stylesheet">
   <!-- MDB -->
-    <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css"
-    rel="stylesheet"
-    />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet" />
 
-    <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-    rel="stylesheet"
-    /> 
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" rel="stylesheet">
 
   <title>MANGOSTEEN | TODAY'S HOT TREND</title>
 </head>
@@ -71,7 +65,6 @@
     </div>
   </div>
 
-
   <!-- 동영상 블럭 -->
   <div class="masonry-wrapper">
     <h3>Today's ranking</h3>
@@ -80,14 +73,14 @@
       {%for img in img_data%}
       {%set img_url= img%}
       <div class="masonry-item">
-        <div class="col-sm-3">
+        <div class="col-sm">
           <span class="badge bg-primary">#{{loop.index}}</span>
         </div>
 
-        <img src="{{img_url}}" id={{link_data[loop.index-1]}} type='button'  data-mdb-toggle="modal" data-mdb-target='#exampleModal' class="masonry-content show">
+        <img src="{{img_url}}" id={{link_data[loop.index-1]}}>
 
         <div class="row">
-          <div class="col-sm">
+          <div class="col-sm-10">
             {{title_data[loop.index-1]}}
           </div>
         </div>
@@ -95,15 +88,13 @@
       {%endfor%}
     </div>
 
-  
-  <!--통계 데이터-->
-
-    <div class="modal top fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"  data-mdb-backdrop="true" data-mdb-keyboard="true">
+    <!--통계 데이터-->
+    <div class="modal top fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+      data-mdb-backdrop="true" data-mdb-keyboard="true">
       <div class="modal-dialog modal-xl ">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">
-              
             </h5>
             <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
           </div>
@@ -113,7 +104,7 @@
 
               </div>
               <div class="col-md-3 Youtube-container">
-                
+
               </div>
               <div class="col-md-2">
 
@@ -122,116 +113,108 @@
 
 
             <div class="row">
-                <div class="col-md-6 Line-container">
-                    <canvas id="LineChart" class="graph" width="300" height="200"></canvas>
-                </div>
-                <div class="col-md-6 Pie-container">
-                    <canvas id="PieChart" class="graph" width="300" height="200"></canvas>
-                </div>
+              <div class="col-md-6 Line-container">
+                <canvas id="LineChart" class="graph" width="300" height="200"></canvas>
+              </div>
+              <div class="col-md-6 Pie-container">
+                <canvas id="PieChart" class="graph" width="300" height="200"></canvas>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-
-    <!-- Script-->
-    <script src='https://masonry.desandro.com/masonry.pkgd.js'></script>
-    <script src="//unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    
-
     <script type="text/javascript">
-    $(document).ready(function(){
-      $('.show').click(function(){
+      $(document).ready(function () {
+        $('.show').click(function () {
           console.log($(".line-container"))
 
-          var value=$(this).attr('id')
+          var value = $(this).attr('id')
           var postdata = {
-              'value':value
+            'value': value
           }
 
           $.ajax({
-              type: 'POST',
-              url: '{{url_for("ajax")}}',
-              data: JSON.stringify(postdata),
-              dataType : 'JSON',
-              contentType: "application/json",
-              success: function(response){
-                  showList(response)
-                  console.log('success')
-              },
-              error: function(request, status, error){
-                  alert('ajax 통신 실패')
-                  alert(error);
-              }
+            type: 'POST',
+            url: '{{url_for("ajax")}}',
+            data: JSON.stringify(postdata),
+            dataType: 'JSON',
+            contentType: "application/json",
+            success: function (response) {
+              showList(response)
+              console.log('success')
+            },
+            error: function (request, status, error) {
+              alert('ajax 통신 실패')
+              alert(error);
+            }
           })
-      })
-      $(".modal").on("hidden.bs.modal",function(){
-        $(".Youtube-container").empty();
-        $(".modal-title").empty();
-        $(".graph").remove();
-        $(".Pie-container").empty()
-        $(".Line-container").append('<canvas id="LineChart" class="graph" width="300" height="200"></canvas>')
-        $(".Pie-container").append('<canvas id="PieChart" class="graph" width="300" height="200"></canvas>')
-      })
-    });
+        })
+        $(".modal").on("hidden.bs.modal", function () {
+          $(".Youtube-container").empty();
+          $(".modal-title").empty();
+          $(".graph").remove();
+          $(".Pie-container").empty()
+          $(".Line-container").append('<canvas id="LineChart" class="graph" width="300" height="200"></canvas>')
+          $(".Pie-container").append('<canvas id="PieChart" class="graph" width="300" height="200"></canvas>')
+        })
+      });
 
-    
-      function showList(data){
-          var line=document.getElementById('LineChart').getContext('2d')
-          var pie=document.getElementById('PieChart').getContext('2d')
-          var LineChart=new Chart(line,{
-              type: 'line',
-              data: {
-                  labels: data.view_result['date'],
-                  datasets: [{
-                      label: '최근 5시간 조회수 변화',
-                      data: data.view_result['rate'],
-                      fill: false,
-                      borderColor: '#B980F0',
-                      linetension: 0.1
-                  }]
-              },
-              options: {
 
-              }
-          });
-          if(data.sentiment_result['rate'] == ""){
-            $(".Pie-container").empty()
-            $(".Pie-container").append(
-              '<div class="alert alert-primary d-flex align-items-center" role="alert"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg><div>댓글수의 데이터가 부족하거나 감정분석을 하기 어려운 댓글들이 많았습니다.</div></div>')
+      function showList(data) {
+        var line = document.getElementById('LineChart').getContext('2d')
+        var pie = document.getElementById('PieChart').getContext('2d')
+        var LineChart = new Chart(line, {
+          type: 'line',
+          data: {
+            labels: data.view_result['date'],
+            datasets: [{
+              label: '최근 5시간 조회수 변화',
+              data: data.view_result['rate'],
+              fill: false,
+              borderColor: '#B980F0',
+              linetension: 0.1
+            }]
+          },
+          options: {
+
           }
-          
-          var PieChart=new Chart(pie,{
-              type:'doughnut',
-              data:{
-                  labels: ['negative','netural','positive'],
-                  datasets:[{
-                      data: data.sentiment_result['rate'],
-                      fill:false,
-                      backgroundColor: ['#FE9898','#F5E79D','#E5FBB8'],
-                      hoverOffset:4
-                  }]
-              },
-          })
-          var id=data.view_result['id']
-          var link='<iframe width="560" height="315" src="https://www.youtube.com/embed/'+id+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
-          console.log(link)
-          $(".Youtube-container").append(link)
-          $(".modal-title").append(data.view_result['title'])
+        });
+        if (data.sentiment_result['rate'] == "") {
+          $(".Pie-container").empty()
+          $(".Pie-container").append(
+            '<div class="alert alert-primary d-flex align-items-center" role="alert"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg><div>댓글수의 데이터가 부족하거나 감정분석을 하기 어려운 댓글들이 많았습니다.</div></div>')
+        }
+
+        var PieChart = new Chart(pie, {
+          type: 'doughnut',
+          data: {
+            labels: ['negative', 'netural', 'positive'],
+            datasets: [{
+              data: data.sentiment_result['rate'],
+              fill: false,
+              backgroundColor: ['#FE9898', '#F5E79D', '#E5FBB8'],
+              hoverOffset: 4
+            }]
+          },
+        })
+        var id = data.view_result['id']
+        var link = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + id + '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+        console.log(link)
+        $(".Youtube-container").append(link)
+        $(".modal-title").append(data.view_result['title'])
       }
 
-  </script>
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"></script>
-      <script type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
-    ></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
 
     <!-- ======= Footer ======= -->
+    <!--
     <footer class="footer" role="contentinfo">
       <div class="container">
         <div class="row">
@@ -240,6 +223,8 @@
               <br>
               All Rights Reserved
             </p>
+    -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>

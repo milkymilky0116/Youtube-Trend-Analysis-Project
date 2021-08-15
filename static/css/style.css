@@ -9,8 +9,8 @@
     --mid-size: 30px;
     --small-size: 20px;
     --micro-size: 10px;
-    --image-width: 200px;
-    --image-height: 200px;
+    --image-width: 300px;
+    --image-height: 300px;
     --padding-size: 12px;
     --margin-size: 42px;
     --box-size: 250px;
@@ -21,7 +21,7 @@
 * {
     font-family: "Raleway", sans-serif;
     color: var(--font-color);
-    /*background-color: var(--background-color);*/
+    background-color: var(--background-color);
 }
 
 body {
@@ -71,7 +71,7 @@ i.far.fa-lemon {
     padding: var(--margin-size);
     justify-content:flex-start;
     position: fixed;
-    width: 30%;
+    width: 25%;
     height: 100%;
 }
 
@@ -99,17 +99,17 @@ input#search-box {
 }
 
 .masonry-wrapper {
-    margin-left: 30%;
+    margin-left: 25%;
     padding: var(--margin-size);
     background-color: var(--background-color);
 }
 
 .masonry-wrapper > .masonry {
-    width: 1000px;
+    width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: 300px 300px 300px;
-    grid-template-rows: 300px 300px 300px;
+    grid-template-columns: 350px 350px 350px;
+    grid-template-rows: 350px 350px 350px;
 }
 
 .masonry-wrapper > .masonry > .masonry-item >.col-sm {
@@ -117,8 +117,7 @@ input#search-box {
 }
 
 .masonry-wrapper > .masonry > .masonry-item {
-    margin-left: 0;
-    margin-bottom: var(--margin-size);
+    margin: var(--micro-size);
 
 }
 
@@ -126,7 +125,14 @@ input#search-box {
     margin-top: var(--margin-size);
 }
 
+.masonry-wrapper > .masonry > .masonry-item > .row > .col-sm {
+    margin: var(--micro-size);
+    padding: 0;
+    display: flex;
+}
+
 img.masonry-content {
+    border-radius: var(--small-size);
     width: var(--image-width);
     height: var(--image-height);
 }
@@ -137,12 +143,16 @@ img.masonry-content {
     grid-auto-rows: max-content;
 }
 
+.badge.bg-primary {
+    margin: var(--small-size);
+}
+
 .footer > .container {
-    display: flex;
-    justify-content: flex-end;
     margin: 0;
 }
 
-.footer > .container > .row {
-    margin: 0;
+img {
+    width: var(--image-width);
+    height: var(--image-height);
+    object-fit: cover;
 }
