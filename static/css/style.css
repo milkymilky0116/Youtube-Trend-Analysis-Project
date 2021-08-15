@@ -109,7 +109,6 @@ input#search-box {
     height: 100%;
     display: grid;
     grid-template-columns: 350px 350px 350px;
-    grid-template-rows: 350px 350px 350px;
 }
 
 .masonry-wrapper > .masonry > .masonry-item >.col-sm {
