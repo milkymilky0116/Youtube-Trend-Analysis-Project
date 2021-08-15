@@ -50,11 +50,9 @@
       <h5>Today's Hot Keywords</h5>
       <p id="keyword">
       <ul>
-        <button id="keyword1">코로나</button>
-        <button id="keyword2">백신</button>
-        <button id="keyword3">빠니보틀</button>
-        <button id="keyword4">곽튜브</button>
-        <button id="keyword5">여행</button>
+        {%for keyword in trend_keyword%}
+        <button id="keyword1">{{keyword}}</button>
+        {%endfor%}
       </ul>
       </p>
     </div>
@@ -164,7 +162,7 @@
           var query_data={
             'value':query_value
           }
-          //show_query_result(query_data)
+          show_query_result(query_data)
       });
 
       $(".modal").on("hidden.bs.modal",function(){
@@ -205,8 +203,9 @@
                   show_search_list(response)
               },
               error: function(request, status, error){
-                  alert('ajax 통신 실패')
-                  alert(error);
+                //$(".keyword_list").append('<a id=result-button class="list-group-item list-group-item-action" id="search-result" value="">검색결과가 존재하지 않습니다.</a>')
+              },
+              complete: function(data){
               }
           })
       }
@@ -232,7 +231,7 @@
       function show_search_list(data){
         var length=data.search_result['result'].length
         for (i=0; i<length; i++){
-          $(".keyword_list").append('<a id=result-button class="list-group-item list-group-item-action value="'+data.search_result['result'][i]+'">'+data.search_result['result'][i]+'</a>')
+          $(".keyword_list").append('<a id=result-button class="list-group-item list-group-item-action" id="search-result" value="'+data.search_result['result'][i] +'">'+data.search_result['result'][i]+'</a>')
         }
       }
 
@@ -280,7 +279,8 @@
       }
 
       function show_query(data){
-        console.log('success')
+        var link_data=data.query_result
+        
       }
 
     </script>

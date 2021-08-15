@@ -13,6 +13,8 @@ model_lib=model.wv
 vocab=model.wv.key_to_index
 tmp=[]
 node=[]
+def get_src():
+    return list(df['src'])
 
 def search_word(result):
     for i in range(len(result)):
@@ -29,6 +31,7 @@ def __search_word(word):
     return tmp_result
 
 def make_word_map(word):
+    
     similar_words=df[df['src']==word]
     result=list(similar_words['dst'])
     tmp.append(word)

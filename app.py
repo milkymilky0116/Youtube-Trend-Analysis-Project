@@ -4,7 +4,7 @@ from urllib.parse import quote_plus
 import pandas as pd
 import pymysql
 import ast
-from util.vis_word_map import make_word_map
+from util.vis_word_map import make_word_map,get_src
 app = Flask(__name__)
 app.jinja_env.filters['quote_plus'] = lambda u: quote_plus(u)
 
@@ -18,9 +18,11 @@ def index():
     df_img = df_img.values.tolist()
     df_img = mariadb_data.convert_resolution('hq', df_img)
     df_id=mariadb_data.convert_id(df_link)
+    random_keyword=mariadb_data.get_random_keyword()
+    
     #df_link = mariadb_data.convert_link(df_link)
 
-    return render_template('index.html', img_data=df_img, link_data=df_link, title_data=df_title, id_data=df_id)
+    return render_template('index.html', img_data=df_img, link_data=df_link, title_data=df_title, id_data=df_id,trend_keyword=random_keyword)
 
 @app.route('/show_result', methods=['POST'])
 def show_result():
@@ -33,23 +35,23 @@ def show_result():
     return jsonify(view_result=line_chart_dict, sentiment_result=pie_chart_dict)
 @app.route('/show_related',methods=['POST'])
 def show_related():
+ 
     data=request.get_json()
-    result={}
-    try:
-        result['result']=make_word_map(data)
-    except:
-        result['result']=['검색결과가 존재하지 않습니다.']
+    print(data)
     
+    print(result)
     return jsonify(search_result=result)
 
 @app.route('/show_video_query',methods=['POST'])
 def show_video_query():
+    
     data=request.get_json()
-    print(data)
     result=mariadb_data.get_query_data(data['value'])
-    print(result)
+    result_dict={}
+    result_dict['query_result']=result
+    
     return jsonify(query_result=result)
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
