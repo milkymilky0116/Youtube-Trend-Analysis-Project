@@ -7,7 +7,6 @@ import ast
 from util.vis_word_map import make_word_map
 app = Flask(__name__)
 app.jinja_env.filters['quote_plus'] = lambda u: quote_plus(u)
-search_csv=pd.read_csv('util/edge_data.csv')
 
 @app.route('/')
 def index():
@@ -26,8 +25,6 @@ def index():
 @app.route('/show_result', methods=['POST'])
 def show_result():
     data = request.get_json()
-    dict={}
-    dict2={}
 
     line_chart_dict,pie_chart_dict=mariadb_data.get_analysis_data(data)
     print(line_chart_dict)
@@ -38,8 +35,11 @@ def show_result():
 def show_related():
     data=request.get_json()
     result={}
-    type(data)
-    result['result']=make_word_map(data)
+    try:
+        result['result']=make_word_map(data)
+    except:
+        result['result']=['검색결과가 존재하지 않습니다.']
+    
     return jsonify(search_result=result)
 
 if __name__ == "__main__":
