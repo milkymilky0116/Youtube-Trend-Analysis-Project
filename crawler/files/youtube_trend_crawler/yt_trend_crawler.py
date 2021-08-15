@@ -214,7 +214,7 @@ class Youtube_Crawler:
             if isinstance(comment_list,list):
                 comment_data=",".join(comment_list)
             sentiment_list,sentiment_result,sentiment_value,comment_sentiment=sentiment_analyse(comment_list,self.id,self.key)
-            self.video_info_comment.append(comment_sentiment)
+            self.video_info_comment.append(str(comment_sentiment))
             self.video_info_sentiment_list.append(str(sentiment_list))
             print(sentiment_result)
             print(sentiment_value)
@@ -401,6 +401,6 @@ class Youtube_Crawler:
 
 
 if __name__=="__main__":
-    keyword_list=['강아지','고양이','뉴스','여행','예능','축구','스마트폰','운동','게임','요리']
+    keyword_list=['강아지','뉴스']
     #keyword_list=['여행']
     Youtube_Crawler(keyword_list,'zofo3v8hwj',"uSaxHZaefo6WTQ2rwcdNJqVGnngg3QkjA10dvEw9","AIzaSyA8AVDeWVW2aEqMds7z51gjhr8o3ebRyik")

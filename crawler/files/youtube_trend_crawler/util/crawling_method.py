@@ -19,11 +19,13 @@ import re
 import json
 import collections
 from googleapiclient.discovery import build
-from konlpy.tag import Okt
 from PyKomoran import Komoran
 import twitter
 from collections import Counter
 from twitter.error import TwitterError
+import os
+currentPath=os.getcwd()
+os.chdir(currentPath)
 
 twitter_consumer_key = "3GMcnn0TU3LJ7OzYI1l06kmdY"
 twitter_consumer_secret = "ll8ZiXwfE8RPyDCHm23Mzm66XFwaXdHBpb4AojTBqGkNGQodYA"  
@@ -192,7 +194,6 @@ def twitter_search(search_query):
         return 0
 
 def extract_keywords(key_info,n):
-    okt=Okt()
     ngram_range=(1,1)
     count=CountVectorizer(ngram_range=ngram_range).fit([key_info])
     candidates=count.get_feature_names()
