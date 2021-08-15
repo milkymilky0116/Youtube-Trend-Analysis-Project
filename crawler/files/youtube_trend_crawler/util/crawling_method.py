@@ -59,7 +59,7 @@ def set_driver_remote():
 
 
     driver=webdriver.Remote(
-        command_executor='http://localhost:4444/wd/hub',
+        command_executor='http://127.0.0.1:4444/wd/hub',
         desired_capabilities=DesiredCapabilities.CHROME,
         options=chrome_options
     )
@@ -275,7 +275,7 @@ def sentiment_analyse(sentence_list,client_id,client_secret):
     elif sentiment_result=="negative":
         sentiment_value=-1
     
-    return result_dict,sentiment_result,sentiment_value
+    return result_dict,sentiment_result,sentiment_value,comment_sentiment
 
 def vid_info(keyword,driver,tm):
         #filter_keyword(keyword,driver)
@@ -298,7 +298,7 @@ def vid_info(keyword,driver,tm):
                     href=video_info.attrs['href']
                     view=[i.text for i in video.select('#metadata-line > span:nth-of-type(1)')][0]
                     view=string_int_filtering(view)
-                    if view>1000:
+                    if view>10000:
                         video_info_link.append(href)
                         print(href)
                         section_views.append(view)

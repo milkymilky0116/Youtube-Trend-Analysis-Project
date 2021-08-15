@@ -1,5 +1,3 @@
-from PyKomoran import Komoran
-
-komoran=Komoran("EXP")
-
-print(komoran.get_plain_text("KOMORAN은 한국어 형태소 분석기입니다."))
+from kiwipiepy import Kiwi, Option
+kiwi=Kiwi()
+kiwi.analyze('안녕하세요',top_n=1)

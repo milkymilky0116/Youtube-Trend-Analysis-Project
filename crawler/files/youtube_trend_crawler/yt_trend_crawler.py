@@ -4,14 +4,15 @@ import pymysql
 from util.crawling_method import *
 
 import pandas as pd
-
+import os
 from pytube import YouTube
 from util.vis_word_map import make_word_map
 from sqlalchemy import create_engine
 from skcriteria import Data, MIN, MAX
 from skcriteria.madm import closeness,simple
 import codecs
-
+currentPath=os.getcwd()
+os.chdir(currentPath)
 
 #유니코드 설정: DB에 저장할때 이모티콘도 깨지지 않게 저장될 수 있도록 utf8mb4로 지정해주었습니다.
 codecs.register(lambda name: codecs.lookup('utf8') if name == 'utf8mb4' else None)
@@ -212,7 +213,6 @@ class Youtube_Crawler:
             comment_data=""
             if isinstance(comment_list,list):
                 comment_data=",".join(comment_list)
-            print(comment_data)
             sentiment_list,sentiment_result,sentiment_value,comment_sentiment=sentiment_analyse(comment_list,self.id,self.key)
             self.video_info_comment.append(comment_sentiment)
             self.video_info_sentiment_list.append(str(sentiment_list))
@@ -304,7 +304,7 @@ class Youtube_Crawler:
         cur.execute(sql)
         """
         
-        engine=create_engine('mysql+mysqlconnector://user:pw@host:port/db_name?charset=utf8mb4')
+        engine=create_engine('mysql+mysqlconnector://{}:{}@{}:{}/{}?charset=utf8mb4'.format(user,pw,ip,port,db_name))
 
         df.to_sql(name='youtube_test_data',if_exists='append',con=engine,index=False)
     def ranking_data(self,ip,port,user,pw,db_name):
@@ -386,21 +386,21 @@ class Youtube_Crawler:
         print("Stage 5: Scoring Video")
         print("="*50)
 
-        self.scoring_video("ip",'port','user','pw','db_name')
+        self.scoring_video("110.165.16.124",30141,'root','sjlee3423','Youtube_Trend_Server')
 
         print("="*50)
         print("Stage 6: Save Data to Maria DB")
         print("="*50)
-        self.save_df_to_db("ip",'port','user','pw','db_name')
+        self.save_df_to_db("110.165.16.124",30141,'root','sjlee3423','Youtube_Trend_Server')
 
         print("="*50)
         print("Stage 7: Ranking Videos")
         print("="*50)
 
-        self.ranking_data("ip",'port','user','pw','db_name')
+        self.ranking_data("110.165.16.124",30141,'root','sjlee3423','Youtube_Trend_Server')
 
 
 if __name__=="__main__":
     keyword_list=['강아지','고양이','뉴스','여행','예능','축구','스마트폰','운동','게임','요리']
     #keyword_list=['여행']
-    Youtube_Crawler(keyword_list,'client_api',"client_secret","google-api")
+    Youtube_Crawler(keyword_list,'zofo3v8hwj',"uSaxHZaefo6WTQ2rwcdNJqVGnngg3QkjA10dvEw9","AIzaSyA8AVDeWVW2aEqMds7z51gjhr8o3ebRyik")
