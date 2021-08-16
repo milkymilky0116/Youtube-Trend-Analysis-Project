@@ -86,6 +86,11 @@ i.far.fa-lemon {
     border-color: var(--background-color);
 }
 
+.todayInfo > .weather > .text-center {
+    font-size: var(--mid-size);
+    padding-top: var(--tiny-size);
+}
+
 .todayInfo > .keyword {
     padding-top: var(--mid-size);
     border-bottom-style:ridge;
@@ -102,6 +107,7 @@ i.far.fa-lemon {
     border-radius: var(--micro-size);
     border-color: var(--background-color);
     background-color: var(--semiwhite-color);
+    font-size: var(--tiny-size);
 }
 
 .dropbox {
@@ -185,6 +191,11 @@ img {
 
 /* 영상 및 자료 확인 섹션 */
 
+.col-md.Youtube-container {
+    display: flex;
+    justify-content: center;
+}
+
 .statistic-btn {
     border-style: none;
     display: flex;
@@ -215,7 +226,7 @@ canvas {
 }
 
 .Youtube-container {
-    padding-bottom: var(--small-size);
+    padding: var(--big-size);
 }
 
 .Line-container {
@@ -232,8 +243,16 @@ canvas {
     padding: var(--padding-size);
 }
 
-.row {
+.modal.top.fade > .row {
     background-color: var(--info-color);
+    margin: 0;
+}
+
+
+.row > h5 {
+    font-style: oblique;
+    display: flex;
+    justify-content: center;
 }
 
 .col-8, p.h4, .col-4.text-center {
@@ -244,8 +263,19 @@ p.h4 {
     font-size: var(--tiny-size);
 }
 
-.col-12.comment-container {
-    padding: var(--mid-size);
+.comment {
+    padding: var(--big-size);
+}
+
+.comment > h5 {
+    font-style: oblique;
+    display: flex;
+    justify-content: center;
+}
+
+.comment-container {
+    padding-top: var(--tiny-size);
     background-color: var(--info-color);
     list-style: none;
+    margin: 0;
 }
