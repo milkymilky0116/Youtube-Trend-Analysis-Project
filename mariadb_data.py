@@ -8,6 +8,7 @@ import requests
 import ast
 import random
 from collections import Counter
+from datetime import datetime
 conn=None
 cur=None
 
@@ -148,6 +149,39 @@ def get_random_keyword():
         count_word_list.append(key)
     random_list=random.sample(count_word_list,10)
     return random_list
+def get_social_weather():
+    conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
+    cur=conn.cursor()
+    current_time=datetime.today().strftime("%Y%m%d%H%M%S")
+    sql='SELECT video_info_sentiment_result FROM youtube_test_data WHERE video_info_publish_date < %s'
+    cur.execute(sql,(current_time,))
+    result_set=cur.fetchall()
+    comment_sentiment=[]
+    for i in range(len(result_set)):
+        comment_sentiment.append(result_set[i][0])
+    sentiment_counter=Counter(comment_sentiment)
+    sentiment_ratio=[]
+    for key,value in sentiment_counter.items():
+        ratio=(value/len(result_set))*100
+        sentiment_counter[key]=ratio
+        sentiment_ratio.append(ratio)
+    social_sentiment=sentiment_counter.most_common(1)[0][0]
+    social_sentiment_ratio=sentiment_counter.most_common(1)[0][1]
+    social_weather=''
+    if social_sentiment=='negative' and social_sentiment_ratio < 50:
+        social_weather='rain'
+    elif social_sentiment=='negative' and social_sentiment_ratio >50:
+        social_weather='Typhoon'
+    elif social_sentiment=='None' and social_sentiment_ratio <50:
+        social_weather='Cloudy'
+    elif social_sentiment=='None' and social_sentiment_ratio >50:
+        social_weather='Drizzling'
+    elif social_sentiment=='positive' and social_sentiment_ratio <50:
+        social_weather='little Cloudy'
+    elif social_sentiment=='None' and social_sentiment_ratio >50:
+        social_weather='Sunny'
+    return social_weather,social_sentiment_ratio,social_sentiment
+get_social_weather()
 def get_query_data(keywords):
     
     conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')

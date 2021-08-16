@@ -44,7 +44,24 @@
   <div class="todayInfo">
     <div class="weather">
       <h5>Today's Social Weather</h5>
-      <p id="social-weather"><i class="fas fa-sun"></i>맑음</p>
+      {%if weather=='Typhoon'%}
+      <p class="text-center" data-mdb-toggle="tooltip" data-mdb-placement="top" title={{ratio}} id="social-weather"><i class="fas fa-cloud-showers-heavy"></i>폭우</p>
+      {%endif%}
+      {%if weather=='rain'%}
+      <p class="text-center" data-mdb-toggle="tooltip" data-mdb-placement="top" title={{ratio}} id="social-weather"><i class="fas fa-cloud-showers-heavy"></i>비</p>
+      {%endif%}
+      {%if weather=='Cloudy'%}
+      <p class="text-center" data-mdb-toggle="tooltip" data-mdb-placement="top" title={{ratio}} id="social-weather"><i class="fas fa-cloud-showers-heavy"></i>흐림</p>
+      {%endif%}
+      {%if weather=='Drizzling'%}
+      <p class="text-center" data-mdb-toggle="tooltip" data-mdb-placement="top" title={{ratio}} id="social-weather"><i class="fas fa-cloud-showers-heavy"></i>이슬비</p>
+      {%endif%}
+      {%if weather=='little Cloudy'%}
+      <p class="text-center" data-mdb-toggle="tooltip" data-mdb-placement="top" title={{ratio}} id="social-weather"><i class="fas fa-cloud-showers-heavy"></i>살짝흐림</p>
+      {%endif%}
+      {%if weather=='Sunny'%}
+      <p class="text-center" data-mdb-toggle="tooltip" data-mdb-placement="top" title={{ratio}} id="social-weather"><i class="fas fa-cloud-showers-heavy"></i>맑음</p>
+      {%endif%}
     </div>
     <div class="keyword">
       <h5>Today's Hot Keywords</h5>
@@ -124,7 +141,7 @@
               </div>
 
               <div class="row">
-                <div class="col-12 comment-container" ondragenter="return dragEnter(event)" ondrop="return dragDrop(event)" ondragover="return dragOver(event)">
+                <div class="col-12 comment-container">
                   </div>
 
                 </div>
