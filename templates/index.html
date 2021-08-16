@@ -143,7 +143,7 @@
     $(document).ready(function(){
 
       var search_num=0;
-      var search_arr=new Array();
+      var search_arr=[];
       var j=0;
       $('.show').click(function(){
         var analysis_value=$(this).attr('id')
@@ -175,18 +175,20 @@
       })
       $(document).on("click", '.result-button', function(event) { 
         var result_value=$(this).attr('value')
-        var new_arr=new Array();
-        let filtered=search_arr.filter((element)=> element !=result_value)
-        for(i=0; i<filtered.length; i++){
-          if (filtered[i]!=null){
-            new_arr[j]=filtered[i]
-            j=j+1
+        console.log(result_value)
+        var i = 0;
+        while (i < search_arr.length) {
+          if (search_arr[i] === result_value) {
+            search_arr.splice(i, 1);
+          } else {
+            ++i;
           }
         }
+        console.log(search_arr)
         var search_data={
-          'value':new_arr
+          'value':search_arr
         }
-        show_video_search(new_arr)
+        show_video_search(search_data)
         $(this).remove();
       });
 

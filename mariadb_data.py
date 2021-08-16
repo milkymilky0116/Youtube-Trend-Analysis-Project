@@ -152,8 +152,12 @@ def get_query_data(keywords):
     
     conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
     cur=conn.cursor()
-    sql="SELECT video_info_thumbnails,video_info_link,video_info_title FROM youtube_test_data WHERE video_info_title or video_info_keywords or video_info_description REGEXP %s ORDER BY video_info_rank"
-    keywords="|".join(keywords)
+    sql="SELECT video_info_thumbnails,video_info_link,video_info_title FROM youtube_test_data WHERE video_info_title or video_info_keywords REGEXP %s ORDER BY video_info_rank"
+    query_keyword=[]
+    for i in range(len(keywords)):
+        if keywords[i]!=None:
+            query_keyword.append(keywords[i])
+    keywords="|".join(query_keyword)
     cur.execute(sql,(keywords,))
     result_set=cur.fetchall()
 
