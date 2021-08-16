@@ -119,6 +119,15 @@ i.far.fa-lemon {
     width: 100%;
 }
 
+.dropbox > .rounded-2 > button {
+    list-style-position: inside;
+    margin: 5px;
+    border-radius: var(--micro-size);
+    border-color: var(--background-color);
+    background-color: var(--semiwhite-color);
+    font-size: var(--tiny-size);
+}
+
 
 .masonry-wrapper > h3 {
     padding-bottom: var(--padding-size);
