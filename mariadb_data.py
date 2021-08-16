@@ -118,6 +118,7 @@ def get_youtube_data(query_num,*args):
         result_set=cur.fetchall()
     else:
         result_set=cur.fetchmany(query_num)
+    print(len(result_set))
     result=[]
     
 
