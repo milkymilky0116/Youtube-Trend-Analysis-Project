@@ -5,10 +5,12 @@
     --info-color: #ffc046;
     --btn-color: #ff6f00;
     --font-color: #0d1e2d;
+    --semiwhite-color: #fff8e1;
     --big-size: 50px;
     --mid-size: 30px;
     --small-size: 20px;
-    --micro-size: 10px;
+    --tiny-size: 16px;
+    --micro-size: 12px;
     --image-width: 300px;
     --image-height: 300px;
     --padding-size: 12px;
@@ -21,11 +23,9 @@
 * {
     font-family: "Raleway", sans-serif;
     color: var(--font-color);
-    background-color: var(--background-color);
 }
 
 body {
-    background-color: var(--background-color);
     height: 0;
 }
 
@@ -65,46 +65,60 @@ i.far.fa-lemon {
     margin-left: var(--margin-size);
 }
 
-.todayInfo {
+/* 사회날씨 및 키워드 섹션 */
+
+.totalContent {
+    display: grid;
+    grid-template-columns: 25% 1fr;
+    padding-top: var(--big-size);
     background-color: var(--background-color);
-    background-attachment: scroll;
-    padding: var(--margin-size);
-    justify-content:flex-start;
-    position: fixed;
-    width: 25%;
-    height: 100%;
 }
 
+.todayInfo {
+    background-color: var(--background-color);
+    padding: var(--margin-size);
+    justify-content:flex-start;
+    position:relative;
+}
+
+.todayInfo > .weather {
+    border-bottom-style:ridge;
+    border-color: var(--background-color);
+}
+
+.todayInfo > .keyword {
+    padding-top: var(--mid-size);
+    border-bottom-style:ridge;
+    border-color: var(--background-color);
+}
 
 .todayInfo > .keyword > ul {
     padding: 0;
 }
 
 .todayInfo > .keyword > ul > button {
-    border-style: none;
-    margin-right: 5px;
+    list-style-position: inside;
+    margin: 5px;
+    border-radius: var(--micro-size);
+    border-color: var(--background-color);
+    background-color: var(--semiwhite-color);
 }
 
-button {
-    border-style: none;
-    margin-right: 5px;
+.dropbox {
+    padding-top: var(--mid-size);
 }
 
-input#search-box {
-    border: none;
+.dropbox > .rounded-2 {
+    background-color: var(--navbar-color);
+    width: 100%;
 }
 
-.todayInfo > .search-bar > #submit-btn {
-    border-style: none;
-    margin-top: 5px;
-}
 
 .masonry-wrapper > h3 {
     padding-bottom: var(--padding-size);
 }
 
 .masonry-wrapper {
-    margin-left: 25%;
     padding: var(--margin-size);
     background-color: var(--background-color);
 }
@@ -125,8 +139,9 @@ input#search-box {
 
 }
 
-.masonry-wrapper > .masonry > .masonry-item > .row {
-    margin-top: var(--margin-size);
+.masonry-wrapper > .masonry > .masonry-item > .row { 
+    padding: var(--tiny-size);
+    background-color: var(--background-color);
 }
 
 .masonry-wrapper > .masonry > .masonry-item > .row > .col-sm {
@@ -165,4 +180,72 @@ img {
     width: 15rem;
     height: 15rem;
     background-color:#FFBF86 ;
+}
+
+
+/* 영상 및 자료 확인 섹션 */
+
+.statistic-btn {
+    border-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.modal-header, .modal-header > .modal-title {
+    background-color: var(--info-color);
+}
+
+.modal-body, .modal-body > .row > * {
+    background-color: var(--info-color);
+}
+
+canvas {
+    background-color: var(--info-color);
+    padding: var(--padding-size);
+    border-style: double;
+}
+
+.alert.alert-primary.d-flex.align-items-center {
+    background-color: var(--info-color);
+    padding: 0;
+}
+
+.modal.top.fade {
+    display: auto;
+}
+
+.Youtube-container {
+    padding-bottom: var(--small-size);
+}
+
+.Line-container {
+    padding: var(--padding-size);
+    display: flex;
+    justify-content: center;
+}
+
+.Line-container > h4 {
+    background-color: var(--info-color);
+}
+
+.Pie-container, .Line-container {
+    padding: var(--padding-size);
+}
+
+.row {
+    background-color: var(--info-color);
+}
+
+.col-8, p.h4, .col-4.text-center {
+    background-color: var(--info-color);
+}
+
+p.h4 {
+    font-size: var(--tiny-size);
+}
+
+.col-12.comment-container {
+    padding: var(--mid-size);
+    background-color: var(--info-color);
+    list-style: none;
 }

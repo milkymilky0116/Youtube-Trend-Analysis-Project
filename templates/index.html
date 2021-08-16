@@ -39,57 +39,64 @@
     </div>
   </nav>
 
+  <div class="totalContent">
+    <!-- 사회날씨 및 핫 키워드 -->
+    <div class="todayInfo">
 
-  <!-- 사회날씨 및 핫 키워드 -->
-  <div class="todayInfo">
-    <div class="weather">
-      <h5>Today's Social Weather</h5>
-      <p id="social-weather"><i class="fas fa-sun"></i>맑음</p>
-    </div>
-    <div class="keyword">
-      <h5>Today's Hot Keywords</h5>
-      <p id="keyword">
-      <ul>
-        {%for keyword in trend_keyword%}
-        <button id="keyword1" class="search-button" ondragstart="return dragStart(event)" value={{keyword}}>{{keyword}}</button>
-        {%endfor%}
-      </ul>
-      </p>
-    </div>
-    <div class="dropbox">
-      <h5>Keyword DropBox</h5>
-      <span class="rounded-2">
-        
+      <div class="weather">
+        <h5>Today's Social Weather</h5>
+        <p id="social-weather"><i class="fas fa-sun"></i>맑음</p>
+      </div>
+
+      <div class="keyword">
+        <h5>Today's Hot Keywords</h5>
+        <p id="keyword">
+        <ul>
+          {%for keyword in trend_keyword%}
+          <button id="keyword1" class="search-button" ondragstart="return dragStart(event)"
+            value={{keyword}}>{{keyword}}</button>
+          {%endfor%}
+        </ul>
+        </p>
+      </div>
+
+      <div class="dropbox">
+        <h5>Keyword DropBox</h5>
+        <p>추천된 키워드를 이용하여 검색해보세요</p>
+        <span class="rounded-2">
+
+        </span>
+      </div>
+
       </span>
     </div>
+    <!-- 동영상 블럭 -->
+    <div class="masonry-wrapper">
+      <h3>Today's ranking</h3>
+      <h5>(be updated every hour!)</h5>
+      <div class="masonry">
+        {%for img in img_data%}
+        {%set img_url= img%}
+        <div class="masonry-item">
+          <div class="col-sm">
+            <span class="badge bg-primary">#{{loop.index}}</span>
+          </div>
 
-    </span>
+          <img src="{{img_url}}" id={{link_data[loop.index-1]}} type='button' data-mdb-toggle="modal"
+            data-mdb-target='#exampleModal' class="masonry-content show">
 
-    </div>
-  </div>
-
-  <!-- 동영상 블럭 -->
-  <div class="masonry-wrapper">
-    <h3>Today's ranking</h3>
-    <h5>(be updated every hour!)</h5>
-    <div class="masonry">
-      {%for img in img_data%}
-      {%set img_url= img%}
-      <div class="masonry-item">
-        <div class="col-sm">
-          <span class="badge bg-primary">#{{loop.index}}</span>
-        </div>
-
-        <img src="{{img_url}}" id={{link_data[loop.index-1]}} type='button'  data-mdb-toggle="modal" data-mdb-target='#exampleModal' class="masonry-content show">
-
-        <div class="row">
-          <div class="col-sm-10">
-            {{title_data[loop.index-1]}}
+          <div class="row">
+            <div class="col-sm-10">
+              {{title_data[loop.index-1]}}
+            </div>
           </div>
         </div>
+        {%endfor%}
       </div>
-      {%endfor%}
+
     </div>
+
+
 
     <!--통계 데이터-->
     <div class="modal top fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -114,67 +121,69 @@
               </div>
             </div>
 
-
             <div class="row">
               <div class="col-md-6 Line-container">
-                <canvas id="LineChart" class="graph" width="300" height="200"></canvas>'
+                <canvas id="LineChart" class="graph" width=300 height=300></canvas>'
               </div>
               <div class="col-md-6 Pie-container">
-                <canvas id="PieChart" class="graph" width="300" height="200"></canvas>
+                <canvas id="PieChart" class="graph" width=300 height=300></canvas>
               </div>
 
-              <div class="row">
-                <div class="col-12 comment-container" ondragenter="return dragEnter(event)" ondrop="return dragDrop(event)" ondragover="return dragOver(event)">
-                  </div>
-
+              <div class="comment">
+                <div class="col-12 comment-container" ondragenter="return dragEnter(event)"
+                  ondrop="return dragDrop(event)" ondragover="return dragOver(event)">
                 </div>
-              </div>
 
+              </div>
             </div>
+
           </div>
         </div>
       </div>
     </div>
+  </div>
+  </div>
 
-    <script type="text/javascript">
+
+  <script type="text/javascript">
 
 
 
-    $(document).ready(function(){
+    $(document).ready(function () {
 
-      var search_num=0;
-      var search_arr=[];
-      var j=0;
-      $('.show').click(function(){
-        var analysis_value=$(this).attr('id')
+      var search_num = 0;
+      var search_arr = [];
+      var j = 0;
+      $('.show').click(function () {
+        var analysis_value = $(this).attr('id')
         var analysis_data = {
-              'value':analysis_value
-          }
+          'value': analysis_value
+        }
         show_video_result(analysis_data);
       })
-      $(document).on("click", '.show', function(event) { 
-        var analysis_value=$(this).attr('id')
+      $(document).on("click", '.show', function (event) {
+        var analysis_value = $(this).attr('id')
         var analysis_data = {
-              'value':analysis_value
-          }
+          'value': analysis_value
+        }
         show_video_result(analysis_data);
       });
-      $('.search-button').click(function(){
-        var search_value=$(this).attr('value')
-        if (search_arr.includes(search_value)){
+      $('.search-button').click(function () {
+        var search_value = $(this).attr('value')
+        if (search_arr.includes(search_value)) {
           alert('검색값이 이미 존재합니다.')
-        }else{
-          search_arr[search_num]=search_value
-          search_num=search_num+1;
-          $('.rounded-2').append(`<button id="keyword1" class="result-button" value=`+search_value+`>`+search_value+`</button>`)
+        } else {
+          search_arr[search_num] = search_value
+          search_num = search_num + 1;
+          $('.rounded-2').append(`<button id="keyword1" class="result-button" value=` + search_value + `>` + search_value + `</button>`)
         }
-        var search_data={
-          'value':search_arr
+        var search_data = {
+          'value': search_arr
         }
         show_video_search(search_data)
       })
-      $(document).on("click", '.result-button', function(event) { 
-        var result_value=$(this).attr('value')
+      $(document).on("click", '.result-button', function (event) {
+        var result_value = $(this).attr('value')
         console.log(result_value)
         var i = 0;
         while (i < search_arr.length) {
@@ -185,15 +194,15 @@
           }
         }
         console.log(search_arr)
-        var search_data={
-          'value':search_arr
+        var search_data = {
+          'value': search_arr
         }
         show_video_search(search_data)
         $(this).remove();
       });
 
 
-      $(".modal").on("hidden.bs.modal",function(){
+      $(".modal").on("hidden.bs.modal", function () {
         $(".comment-container").empty();
         $(".Youtube-container").empty();
         $(".modal-title").empty();
@@ -203,148 +212,145 @@
         $(".Pie-container").append('<canvas id="PieChart" class="graph" width="300" height="200"></canvas>')
       })
     });
-      function show_video_result(analysis_data){
-          $.ajax({
-              type: 'POST',
-              url: '{{url_for("show_result")}}',
-              data: JSON.stringify(analysis_data),
-              dataType : 'JSON',
-              contentType: "application/json",
-              success: function(response){
-                  showList(response)
-                  console.log('success')
-              },
-              error: function(request, status, error){
-                  alert('ajax 통신 실패')
-                  alert(error);
-              }
-          })
-      }
-      function show_video_search(search_data){
-          $.ajax({
-              type: 'POST',
-              url: '{{url_for("show_search")}}',
-              data: JSON.stringify(search_data),
-              dataType : 'JSON',
-              contentType: "application/json",
-              success: function(response){
-                  showList_search(response)
-              },
-              error: function(request, status, error){
-                  alert('ajax 통신 실패')
-                  alert(error);
-              }
-          })
-      }
+    function show_video_result(analysis_data) {
+      $.ajax({
+        type: 'POST',
+        url: '{{url_for("show_result")}}',
+        data: JSON.stringify(analysis_data),
+        dataType: 'JSON',
+        contentType: "application/json",
+        success: function (response) {
+          showList(response)
+          console.log('success')
+        },
+        error: function (request, status, error) {
+          alert('ajax 통신 실패')
+          alert(error);
+        }
+      })
+    }
+    function show_video_search(search_data) {
+      $.ajax({
+        type: 'POST',
+        url: '{{url_for("show_search")}}',
+        data: JSON.stringify(search_data),
+        dataType: 'JSON',
+        contentType: "application/json",
+        success: function (response) {
+          showList_search(response)
+        },
+        error: function (request, status, error) {
+          alert('ajax 통신 실패')
+          alert(error);
+        }
+      })
+    }
 
-      function showList_search(data){
-        var thumbnails=data.query_result['thumbnails']
-        var title=data.query_result['title']
-        var link=data.query_result['link']
-        $(".masonry").empty();
-        for(i=0; i<link.length; i++){
-          var youtube_container=`      
+    function showList_search(data) {
+      var thumbnails = data.query_result['thumbnails']
+      var title = data.query_result['title']
+      var link = data.query_result['link']
+      $(".masonry").empty();
+      for (i = 0; i < link.length; i++) {
+        var youtube_container = `      
         <div class="masonry-item">
         <div class="col-sm">
-          <span class="badge bg-primary">#`+(i+1)+`</span>
+          <span class="badge bg-primary">#`+ (i + 1) + `</span>
         </div>
 
-        <img src="`+thumbnails[i]+ `"id="`+link[i]+`"type='button'  data-mdb-toggle="modal" data-mdb-target='#exampleModal' class="masonry-content show">
+        <img src="`+ thumbnails[i] + `"id="` + link[i] + `"type='button'  data-mdb-toggle="modal" data-mdb-target='#exampleModal' class="masonry-content show">
         <div class="row">
           <div class="col-sm-10">`+
-            title[i]+`
+          title[i] + `
           </div>
         </div>
       </div>`
-          $(".masonry").append(youtube_container)
-        }
-        
+        $(".masonry").append(youtube_container)
       }
 
+    }
 
-
-
-      function showList(data) {
-        var line = document.getElementById('LineChart').getContext('2d')
-        var pie = document.getElementById('PieChart').getContext('2d')
-        var LineChart = new Chart(line, {
-          type: 'line',
-          data: {
-            labels: data.view_result['date'],
-            datasets: [{
-              label: '최근 5시간 조회수 변화',
-              data: data.view_result['rate'],
-              fill: false,
-              borderColor: '#B980F0',
-              linetension: 0.1
-            }]
-          },
-          options: {
-          }
-        });
-        if (data.sentiment_result['rate'] == "") {
-          $(".Pie-container").empty()
-          $(".comment-container").append(
-            '<div class="alert alert-primary d-flex align-items-center" role="alert"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg><div>댓글수의 데이터가 부족하거나 감정분석을 하기 어려운 댓글들이 많았습니다.</div></div>')
+    function showList(data) {
+      var line = document.getElementById('LineChart').getContext('2d')
+      var pie = document.getElementById('PieChart').getContext('2d')
+      var LineChart = new Chart(line, {
+        type: 'line',
+        data: {
+          labels: data.view_result['date'],
+          datasets: [{
+            label: '최근 5시간 조회수 변화',
+            data: data.view_result['rate'],
+            fill: false,
+            borderColor: '#B980F0',
+            linetension: 0.1
+          }]
+        },
+        options: {
         }
+      });
+      if (data.sentiment_result['rate'] == "") {
+        $(".Pie-container").empty()
+        $(".comment-container").append(
+          '<div class="alert alert-primary d-flex align-items-center" role="alert"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg><div>댓글수의 데이터가 부족하거나 감정분석을 하기 어려운 댓글들이 많았습니다.</div></div>')
+      }
 
-        var PieChart = new Chart(pie, {
-          type: 'doughnut',
-          data: {
-            labels: data.sentiment_result['sentiment'],
-            datasets: [{
-              data: data.sentiment_result['rate'],
-              fill: false,
-              backgroundColor: ['#85D2D0','#FFF4BD','#F4B9B8'],
-              hoverOffset: 4
-            }]
-          },
-        })
-        var id = data.view_result['id']
-        var link = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + id + '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
-        console.log(link)
-        $(".Youtube-container").append(link)
-        $(".modal-title").append(data.view_result['title'])
+      var PieChart = new Chart(pie, {
+        type: 'doughnut',
+        data: {
+          labels: data.sentiment_result['sentiment'],
+          datasets: [{
+            data: data.sentiment_result['rate'],
+            fill: false,
+            backgroundColor: ['#85D2D0', '#FFF4BD', '#F4B9B8'],
+            hoverOffset: 4
+          }]
+        },
+      })
+      var id = data.view_result['id']
+      var link = '<iframe width="560" height="400" src="https://www.youtube.com/embed/' + id + '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+      console.log(link)
+      $(".Youtube-container").append(link)
+      $(".modal-title").append(data.view_result['title'])
 
-        var comment=data.comment_result['comment']
-        var comment_sentiment=data.comment_result['sentiment']
-        for(i=0; i<comment.length; i++){
-          if (comment_sentiment[i]=='positive'){
-            $(".comment-container").append(`<div class="row">
+      var comment = data.comment_result['comment']
+      var comment_sentiment = data.comment_result['sentiment']
+      for (i = 0; i < comment.length; i++) {
+        if (comment_sentiment[i] == 'positive') {
+          $(".comment-container").append(`<div class="row">
                     <div class="col-8">
-                      <p class="h4">`+comment[i]+`</p>
+                      <p class="h4">`+ comment[i] + `</p>
                     </div>
                     <div class="col-4 text-center" style="color:green;">
                       <p class="h4">
                         <i class="fas fa-smile fa-lg"></i>
                     </p>
                   </div>.`)
-          }else{
-            $(".comment-container").append(
-              `<div class="row">
+        } else {
+          $(".comment-container").append(
+            `<div class="row">
                     <div class="col-8">
-                      <p class="h4">`+comment[i]+`</p>
+                      <p class="h4">`+ comment[i] + `</p>
                     </div>
                     <div class="col-4 text-center" style="color:red;">
                       <p class="h4">
                         <i class="fas fa-angry fa-lg"></i>
                     </p>
                   </div>.`)
-          }
-
-          //$(".comment-container").append('<div class="card text-white bg-dark"><div class="card-body">'+comment[i]+'</div></div>')
         }
+
+        //$(".comment-container").append('<div class="card text-white bg-dark"><div class="card-body">'+comment[i]+'</div></div>')
       }
+    }
 
-    </script>
+  </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
 
-    <!-- ======= Footer ======= -->
-    <!--
+  <!-- ======= Footer ======= -->
+  <!--
     <footer class="footer" role="contentinfo">
       <div class="container">
         <div class="row">
@@ -355,8 +361,8 @@
             </p>
     -->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>
