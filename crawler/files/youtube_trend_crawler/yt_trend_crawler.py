@@ -19,7 +19,7 @@ codecs.register(lambda name: codecs.lookup('utf8') if name == 'utf8mb4' else Non
 
 class Youtube_Crawler:
     #크롤러 클래스
-    def __init__(self,keywords,client_id,client_secret,google_api):
+    def __init__(self,keywords,client_id,client_secret,google_api,driver):
 
         #DB에 저장할 데이터들
         self.video_info_title=[]
@@ -56,7 +56,7 @@ class Youtube_Crawler:
 
         self.tm=time.strftime('%Y-%m-%d-%I %M-%p', time.localtime(time.time()))
         
-        self.crawling()
+        self.crawling(driver)
     
     def get_client_id(self):
         return self.__client_id
@@ -358,12 +358,11 @@ class Youtube_Crawler:
         conn.close()
 
 
-    def crawling(self):
+    def crawling(self,driver):
 
         print("="*50)
         print("Stage 1: Collecting Data")
         print("="*50)
-        driver=self.set_driver('server')
         self.collect_data(driver,self.keywords)
 
         print("="*50)
@@ -398,9 +397,3 @@ class Youtube_Crawler:
         print("="*50)
 
         self.ranking_data("110.165.16.124",30141,'root','sjlee3423','Youtube_Trend_Server')
-
-
-if __name__=="__main__":
-    keyword_list=['강아지','뉴스']
-    #keyword_list=['여행']
-    Youtube_Crawler(keyword_list,'zofo3v8hwj',"uSaxHZaefo6WTQ2rwcdNJqVGnngg3QkjA10dvEw9","AIzaSyA8AVDeWVW2aEqMds7z51gjhr8o3ebRyik")
