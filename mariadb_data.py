@@ -91,7 +91,7 @@ def get_analysis_data(data):
             comment_context.append(key)
             comment_sentiment.append(value)
     comment_result={}
-    comment_result['comment']=comment_context
+    comment_result['comment']=comment_context[:10]
     comment_result['sentiment']=comment_sentiment
 
 
