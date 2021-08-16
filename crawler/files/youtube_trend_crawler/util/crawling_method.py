@@ -20,6 +20,7 @@ import json
 import collections
 from googleapiclient.discovery import build
 from PyKomoran import Komoran
+from konlpy.tag import Okt
 import twitter
 from collections import Counter
 from twitter.error import TwitterError
@@ -164,9 +165,11 @@ def comment_crawler(api_key,video_link):
         return None
 
 def keyword_nouns(keywords):
+    okt=Okt()
     result=[]
     for i in range(len(keywords)):
-        nouns=komoran.get_morphes_by_tags(keywords[i],tag_list=['NNP','NNG'])
+        #nouns=komoran.get_morphes_by_tags(keywords[i],tag_list=['NNP','NNG'])
+        nouns=okt.nouns(keywords[i])
         for j in range(len(nouns)):
             result.append(nouns[j])
     return result

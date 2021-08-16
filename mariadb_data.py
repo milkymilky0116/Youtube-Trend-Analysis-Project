@@ -7,6 +7,7 @@ from pytube.exceptions import MembersOnly, VideoPrivate, VideoRegionBlocked, Vid
 import requests
 import ast
 import random
+from collections import Counter
 conn=None
 cur=None
 
@@ -43,7 +44,8 @@ def get_analysis_data(data):
     sql="SELECT date,views FROM youtube_view_data WHERE link=%s"
     cur.execute(sql,link)
     result=cur.fetchall()
-    result=result[len(result)-5:]
+
+    #result=result[:]
     print(result)
     view_date=[]
     view_rate=[]
@@ -51,26 +53,27 @@ def get_analysis_data(data):
         view_date.append(result[i][0])
         view_rate.append(result[i][1])
 
-    sql="SELECT video_info_sentiment_list,video_info_title FROM youtube_test_data WHERE video_info_link=%s"
+    sql="SELECT video_info_sentiment_list,video_info_title,video_info_comment FROM youtube_test_data WHERE video_info_link=%s"
     cur.execute(sql,link)
     sentiment_result=cur.fetchall()
 
     video_title=sentiment_result[0][1]
-    """
 
-    """
-    print(sentiment_result)
-    sentiment_result=ast.literal_eval(sentiment_result[0][0])
+    sentiment_dict=ast.literal_eval(sentiment_result[0][0])
 
     sentiment_label=[]
     sentiment_rate=[]
+    
+    comment_context=[]
+    comment_sentiment=[]
 
     try:
-        for key,value in sentiment_result.items():
+        for key,value in sentiment_dict.items():
             sentiment_label.append(key)
             sentiment_rate.append(value*100)
     except:
         pass
+
         
     line_chart_dict['date']=view_date
     line_chart_dict['rate']=view_rate
@@ -81,7 +84,21 @@ def get_analysis_data(data):
     pie_chart_dict['sentiment']=sentiment_label
     pie_chart_dict['rate']=sentiment_rate
 
-    return line_chart_dict,pie_chart_dict
+    comment=sentiment_result[0][2]
+    if comment!='None':
+        comment=ast.literal_eval(comment)
+        for key,value in comment.items():
+            comment_context.append(key)
+            comment_sentiment.append(value)
+    comment_result={}
+    comment_result['comment']=comment_context
+    comment_result['sentiment']=comment_sentiment
+
+
+
+    
+
+    return line_chart_dict,pie_chart_dict,comment_result
 
 
 
@@ -94,7 +111,7 @@ def get_youtube_data(query_num,*args):
         elements.append(i)
     
     query=','.join(elements)
-    select_query=''.join("SELECT {} FROM youtube_test_data".format(query))
+    select_query=''.join("SELECT {} FROM youtube_test_data ORDER BY video_info_rank".format(query))
     cur.execute(select_query)
     if query_num=='all':
         result_set=cur.fetchall()
@@ -124,36 +141,33 @@ def get_random_keyword():
         words=result_set[i][0].split('|')
         for j in range(len(words)):
             word_list.append(words[j])
-    random_list=random.sample(word_list,10)
+    count_list=Counter(word_list)
+    count_list={ x: count for x, count in count_list.items() if count >=2}
+    count_word_list=[]
+    for key,value in count_list.items():
+        count_word_list.append(key)
+    random_list=random.sample(count_word_list,10)
     return random_list
-def get_query_data(keyword):
+def get_query_data(keywords):
     
     conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
     cur=conn.cursor()
-    sql="SELECT video_info_thumbnails FROM youtube_test_data WHERE video_info_title or video_info_keywords or video_info_description REGEXP %s ORDER BY video_info_rank"
-    #keyword=["고양이","강아지"]
-    #keyword="|".join(keyword)
-    cur.execute(sql,(keyword,))
+    sql="SELECT video_info_thumbnails,video_info_link,video_info_title FROM youtube_test_data WHERE video_info_title or video_info_keywords or video_info_description REGEXP %s ORDER BY video_info_rank"
+    keywords="|".join(keywords)
+    cur.execute(sql,(keywords,))
     result_set=cur.fetchall()
 
-    result=[]
-    for row in result_set[1:]:
-        result.append(str(row[0]))
+    thumbnails=[]
+    link=[]
+    title=[]
+    for i in range(len(result_set)):
+        thumbnails.append(result_set[i][0])
+        link.append(result_set[i][1])
+        title.append(result_set[i][2])
+    result_dict={}
+    result_dict['thumbnails']=thumbnails
+    result_dict['link']=link
+    result_dict['title']=title
 
-    return result
-def get_related_data(keyword):
-    
-    conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
-    cur=conn.cursor()
-    sql="SELECT video_info_keywords,video_info_title,video_info_summary_data,video_info_comment FROM youtube_test_data WHERE video_info_title or video_info_keywords or video_info_description REGEXP %s ORDER BY video_info_rank"
-    #keyword=["고양이","강아지"]
-    #keyword="|".join(keyword)
-    cur.execute(sql,(keyword,))
-    result_set=cur.fetchall()
-
-    result=[]
-    for row in result_set[1:]:
-        result.append(str(row[0]))
-
-    return result
+    return result_dict
 

@@ -51,18 +51,20 @@
       <p id="keyword">
       <ul>
         {%for keyword in trend_keyword%}
-        <button id="keyword1">{{keyword}}</button>
+        <button id="keyword1" class="search-button" ondragstart="return dragStart(event)" value={{keyword}}>{{keyword}}</button>
         {%endfor%}
       </ul>
       </p>
     </div>
-    <!--search bar -->
-    <div class="search-bar">
-      <input type="text" id="search-box" placeholder="키워드 검색">
-      <button type="submit" id="submit-btn"><i class="fas fa-search"></i></button>
-      <div class="keyword_box keyword_list">
-      </div>
+    <div class="dropbox">
+      <h5>Keyword DropBox</h5>
+      <span class="rounded-2">
+        
+      </span>
     </div>
+
+    </span>
+
     </div>
   </div>
 
@@ -120,6 +122,14 @@
               <div class="col-md-6 Pie-container">
                 <canvas id="PieChart" class="graph" width="300" height="200"></canvas>
               </div>
+
+              <div class="row">
+                <div class="col-12 comment-container" ondragenter="return dragEnter(event)" ondrop="return dragDrop(event)" ondragover="return dragOver(event)">
+                  </div>
+
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -127,27 +137,14 @@
     </div>
 
     <script type="text/javascript">
-    $(document).ready(function(){
-      $("#search-box").keydown(function(){
-        $(".keyword_list").empty();
-        if(event.keyCode==13 || event.which==13){
-          var search_value=$(this).val();
-          var search_data={
-            'value':search_value
-          }
-          show_related_result(search_value);
-        }
-      })
-      $('#submit-btn').click(function(){
-        $(".keyword_list").empty();
-        var search_value=$("#search-box").val();
-        var search_data={
-          'value':search_value
-        }
-          show_related_result(search_value);
-      })
 
-      
+
+
+    $(document).ready(function(){
+
+      var search_num=0;
+      var search_arr=new Array();
+      var j=0;
       $('.show').click(function(){
         var analysis_value=$(this).attr('id')
         var analysis_data = {
@@ -155,17 +152,47 @@
           }
         show_video_result(analysis_data);
       })
-
-      $(document).on("click", '#result-button', function(event) { 
-          var query_value=$(this).attr('value')
-          console.log(query_value)
-          var query_data={
-            'value':query_value
+      $(document).on("click", '.show', function(event) { 
+        var analysis_value=$(this).attr('id')
+        var analysis_data = {
+              'value':analysis_value
           }
-          show_query_result(query_data)
+        show_video_result(analysis_data);
+      });
+      $('.search-button').click(function(){
+        var search_value=$(this).attr('value')
+        if (search_arr.includes(search_value)){
+          alert('검색값이 이미 존재합니다.')
+        }else{
+          search_arr[search_num]=search_value
+          search_num=search_num+1;
+          $('.rounded-2').append(`<button id="keyword1" class="result-button" value=`+search_value+`>`+search_value+`</button>`)
+        }
+        var search_data={
+          'value':search_arr
+        }
+        show_video_search(search_data)
+      })
+      $(document).on("click", '.result-button', function(event) { 
+        var result_value=$(this).attr('value')
+        var new_arr=new Array();
+        let filtered=search_arr.filter((element)=> element !=result_value)
+        for(i=0; i<filtered.length; i++){
+          if (filtered[i]!=null){
+            new_arr[j]=filtered[i]
+            j=j+1
+          }
+        }
+        var search_data={
+          'value':new_arr
+        }
+        show_video_search(new_arr)
+        $(this).remove();
       });
 
+
       $(".modal").on("hidden.bs.modal",function(){
+        $(".comment-container").empty();
         $(".Youtube-container").empty();
         $(".modal-title").empty();
         $(".graph").remove();
@@ -191,34 +218,15 @@
               }
           })
       }
-
-      function show_related_result(value){
-        $.ajax({
+      function show_video_search(search_data){
+          $.ajax({
               type: 'POST',
-              url: '{{url_for("show_related")}}',
-              data: JSON.stringify(value),
+              url: '{{url_for("show_search")}}',
+              data: JSON.stringify(search_data),
               dataType : 'JSON',
               contentType: "application/json",
               success: function(response){
-                  show_search_list(response)
-              },
-              error: function(request, status, error){
-                //$(".keyword_list").append('<a id=result-button class="list-group-item list-group-item-action" id="search-result" value="">검색결과가 존재하지 않습니다.</a>')
-              },
-              complete: function(data){
-              }
-          })
-      }
-
-      function show_query_result(value){
-        $.ajax({
-              type: 'POST',
-              url: '{{url_for("show_video_query")}}',
-              data: JSON.stringify(value),
-              dataType : 'JSON',
-              contentType: "application/json",
-              success: function(response){
-                  show_query(response)
+                  showList_search(response)
               },
               error: function(request, status, error){
                   alert('ajax 통신 실패')
@@ -227,13 +235,32 @@
           })
       }
 
+      function showList_search(data){
+        var thumbnails=data.query_result['thumbnails']
+        var title=data.query_result['title']
+        var link=data.query_result['link']
+        $(".masonry").empty();
+        for(i=0; i<link.length; i++){
+          var youtube_container=`      
+        <div class="masonry-item">
+        <div class="col-sm">
+          <span class="badge bg-primary">#`+(i+1)+`</span>
+        </div>
 
-      function show_search_list(data){
-        var length=data.search_result['result'].length
-        for (i=0; i<length; i++){
-          $(".keyword_list").append('<a id=result-button class="list-group-item list-group-item-action" id="search-result" value="'+data.search_result['result'][i] +'">'+data.search_result['result'][i]+'</a>')
+        <img src="`+thumbnails[i]+ `"id="`+link[i]+`"type='button'  data-mdb-toggle="modal" data-mdb-target='#exampleModal' class="masonry-content show">
+        <div class="row">
+          <div class="col-sm-10">`+
+            title[i]+`
+          </div>
+        </div>
+      </div>`
+          $(".masonry").append(youtube_container)
         }
+        
       }
+
+
+
 
       function showList(data) {
         var line = document.getElementById('LineChart').getContext('2d')
@@ -255,7 +282,7 @@
         });
         if (data.sentiment_result['rate'] == "") {
           $(".Pie-container").empty()
-          $(".Pie-container").append(
+          $(".comment-container").append(
             '<div class="alert alert-primary d-flex align-items-center" role="alert"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg><div>댓글수의 데이터가 부족하거나 감정분석을 하기 어려운 댓글들이 많았습니다.</div></div>')
         }
 
@@ -276,11 +303,35 @@
         console.log(link)
         $(".Youtube-container").append(link)
         $(".modal-title").append(data.view_result['title'])
-      }
 
-      function show_query(data){
-        var link_data=data.query_result
-        
+        var comment=data.comment_result['comment']
+        var comment_sentiment=data.comment_result['sentiment']
+        for(i=0; i<comment.length; i++){
+          if (comment_sentiment[i]=='positive'){
+            $(".comment-container").append(`<div class="row">
+                    <div class="col-8">
+                      <p class="h4">`+comment[i]+`</p>
+                    </div>
+                    <div class="col-4 text-center" style="color:green;">
+                      <p class="h4">
+                        <i class="fas fa-smile fa-lg"></i>
+                    </p>
+                  </div>.`)
+          }else{
+            $(".comment-container").append(
+              `<div class="row">
+                    <div class="col-8">
+                      <p class="h4">`+comment[i]+`</p>
+                    </div>
+                    <div class="col-4 text-center" style="color:red;">
+                      <p class="h4">
+                        <i class="fas fa-angry fa-lg"></i>
+                    </p>
+                  </div>.`)
+          }
+
+          //$(".comment-container").append('<div class="card text-white bg-dark"><div class="card-body">'+comment[i]+'</div></div>')
+        }
       }
 
     </script>

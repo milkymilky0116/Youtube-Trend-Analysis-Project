@@ -28,29 +28,19 @@ def index():
 def show_result():
     data = request.get_json()
 
-    line_chart_dict,pie_chart_dict=mariadb_data.get_analysis_data(data)
-    print(line_chart_dict)
-    print(pie_chart_dict)
+    line_chart_dict,pie_chart_dict,comment_result=mariadb_data.get_analysis_data(data)
 
-    return jsonify(view_result=line_chart_dict, sentiment_result=pie_chart_dict)
-@app.route('/show_related',methods=['POST'])
-def show_related():
- 
+    return jsonify(view_result=line_chart_dict, sentiment_result=pie_chart_dict, comment_result=comment_result)
+
+
+@app.route('/show_search',methods=['POST'])
+def show_search():
     data=request.get_json()
     print(data)
+    search_list=data['value']
+    query_result=mariadb_data.get_query_data(search_list)
     
-    print(result)
-    return jsonify(search_result=result)
-
-@app.route('/show_video_query',methods=['POST'])
-def show_video_query():
-    
-    data=request.get_json()
-    result=mariadb_data.get_query_data(data['value'])
-    result_dict={}
-    result_dict['query_result']=result
-    
-    return jsonify(query_result=result)
+    return jsonify(query_result=query_result)
 
 
 if __name__ == "__main__":

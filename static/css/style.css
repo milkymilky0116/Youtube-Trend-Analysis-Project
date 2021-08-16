@@ -85,6 +85,11 @@ i.far.fa-lemon {
     margin-right: 5px;
 }
 
+button {
+    border-style: none;
+    margin-right: 5px;
+}
+
 input#search-box {
     border: none;
 }
@@ -154,4 +159,10 @@ img {
     width: var(--image-width);
     height: var(--image-height);
     object-fit: cover;
+}
+.rounded-2{
+    display: inline-block;
+    width: 15rem;
+    height: 15rem;
+    background-color:#FFBF86 ;
 }

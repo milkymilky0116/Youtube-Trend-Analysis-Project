@@ -7,21 +7,22 @@ import ast
 from gensim.models import KeyedVectors
 from collections import Counter
 import random
-def get_random_keyword():
-    okt=Okt()
+from pytube import YouTube
+
+def get_query_data(keywords):
+    
     conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
     cur=conn.cursor()
-    sql="SELECT video_info_keywords FROM youtube_test_data ORDER BY video_info_rank"
-    #keyword=["고양이","강아지"]
-    #keyword="|".join(keyword)
-    cur.execute(sql)
+    sql="SELECT video_info_thumbnails FROM youtube_test_data WHERE video_info_title or video_info_keywords or video_info_description REGEXP %s ORDER BY video_info_rank"
+    keywords="|".join(keywords)
+    cur.execute(sql,(keywords,))
     result_set=cur.fetchall()
-    word_list=[]
-    for i in range(len(result_set)):
-        words=result_set[i][0].split('|')
-        for j in range(len(words)):
-            word_list.append(words[j])
-    random_list=random.sample(word_list,10)
-    return random_list
 
+    result=[]
+    for row in result_set[1:]:
+        result.append(str(row[0]))
+
+    return result
+
+print(get_query_data(['고양이','강아지']))
     
