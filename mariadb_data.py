@@ -46,7 +46,7 @@ def get_analysis_data(data):
     cur.execute(sql,link)
     result=cur.fetchall()
 
-    #result=result[:]
+    result=result[len(result)-5:]
     print(result)
     view_date=[]
     view_rate=[]
