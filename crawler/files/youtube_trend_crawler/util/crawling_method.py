@@ -300,7 +300,11 @@ def vid_info(keyword,driver,tm):
                     video_len=len(all_videos)
                     video_info=video.find(id='video-title')
                     href=video_info.attrs['href']
-                    view=[i.text for i in video.select('#metadata-line > span:nth-of-type(1)')][0]
+                    try:
+                        view=[i.text for i in video.select('#metadata-line > span:nth-of-type(1)')][0]
+                    except:
+                        view=None
+                    print(view)
                     view=string_int_filtering(view)
                     if view>10000:
                         video_info_link.append(href)
