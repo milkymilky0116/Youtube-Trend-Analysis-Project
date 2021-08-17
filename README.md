@@ -1,4 +1,4 @@
-# Youtube-Trend-Analysis-Project (유튜브 실시간 검색 프로젝트)
+# Youtube-Trend-Analysis-Project (유튜브 실시간 트렌드 검색 프로젝트)
 
 ### :video_camera: Tensorflow, Word2Vec, Multi-criteria Decision 등을 이용한 실시간 유튜브 트렌드 프로젝트   
 
