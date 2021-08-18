@@ -51,19 +51,22 @@
 
 크롤러의 프로세스는 총 6가지 과정을 거쳐서 진행이 됩니다.
 
+```
 1. 데이터 수집 (Selenium)
 2. 동영상 파싱 (조회수, 제목, 좋아요 수... 같은 메타데이터를 얻어옴) (pytube 모듈)
 3. 키워드 요약 (Sentence-Transformers)
 4. 댓글 감정분석 (Youtube Data API, CLOVA Sentiment API)
 5. 데이터 랭킹 (Multi-Criteria Decision, Twitter API)
 6. DB 저장
-
+```
 
 ### Word2vec 모델 테스트
 
 해당 프로젝트에서 주요하게 쓰인 Word2vec 모델에 대해서 모델을 시각화하는 기능을 제공하고 있습니다. visualization에 해당 파일들이 저장되어 있습니다.
 
-vis_word_map.py에서 make_word_map에 원하는 키워드를 넣으시고 실행시키면 Node와 edge로 구성된 단어 관계도가 표시되게 됩니다.
+실행시키기 위해서는 Gensim의 Word2vec, pyvis 모듈 설치가 필요합니다.
+
+vis_word_map.py에서 make_word_map에 원하는 키워드를 넣으시고 실행시키면 Node와 edge로 구성된 단어 관계도가 표시됩니다.
 
 ![image](https://user-images.githubusercontent.com/84823612/129853424-1cc7e6ab-50c1-4bc3-bf1e-7f56568a8690.png)
 
