@@ -80,9 +80,9 @@ def make_word_map(word):
         search_list.append(word)
 
 
-    return search_list
+    #return search_list
 
-"""
+
     for e in edge_data:
         src=e[0]
         dst=e[1]
@@ -94,9 +94,9 @@ def make_word_map(word):
         if node['id'] in tmp_targets:
             node['size']=node_size[node['id']]
 
-"""
+make_word_map('고양이')
 
-#net.show('test.html')
+net.show('test.html')
 
 
 

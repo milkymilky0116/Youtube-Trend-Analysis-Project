@@ -1,0 +1,116 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 900px;
+            height: 1200px;
+            background-color: #222222;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"font": {"color": "white"}, "id": "\uc62c\ub9bc\ud53d", "label": "\uc62c\ub9bc\ud53d", "shape": "dot", "size": 100, "title": "\uc62c\ub9bc\ud53d"}, {"font": {"color": "white"}, "id": "\ub3d9\uacc4", "label": "\ub3d9\uacc4", "shape": "dot", "size": 75, "title": "\ub3d9\uacc4"}, {"font": {"color": "white"}, "id": "\ud3c9\ucc3d", "label": "\ud3c9\ucc3d", "shape": "dot", "size": 73, "title": "\ud3c9\ucc3d"}, {"font": {"color": "white"}, "id": "\uc18c\uce58", "label": "\uc18c\uce58", "shape": "dot", "title": "\uc18c\uce58"}, {"font": {"color": "white"}, "id": "\uc2a4\ucf00\uc774\ud305", "label": "\uc2a4\ucf00\uc774\ud305", "shape": "dot", "title": "\uc2a4\ucf00\uc774\ud305"}, {"font": {"color": "white"}, "id": "\uc1fc\ud2b8\ud2b8\ub799", "label": "\uc1fc\ud2b8\ud2b8\ub799", "shape": "dot", "title": "\uc1fc\ud2b8\ud2b8\ub799"}, {"font": {"color": "white"}, "id": "\uae08\uba54\ub2ec\ub9ac\uc2a4\ud2b8", "label": "\uae08\uba54\ub2ec\ub9ac\uc2a4\ud2b8", "shape": "dot", "title": "\uae08\uba54\ub2ec\ub9ac\uc2a4\ud2b8"}, {"font": {"color": "white"}, "id": "\uc120\uc218\uad8c", "label": "\uc120\uc218\uad8c", "shape": "dot", "title": "\uc120\uc218\uad8c"}, {"font": {"color": "white"}, "id": "\uc720\ub2c8\ubc84\uc2dc\uc544\ub4dc", "label": "\uc720\ub2c8\ubc84\uc2dc\uc544\ub4dc", "shape": "dot", "title": "\uc720\ub2c8\ubc84\uc2dc\uc544\ub4dc"}, {"font": {"color": "white"}, "id": "\uae08\uba54\ub2ec", "label": "\uae08\uba54\ub2ec", "shape": "dot", "title": "\uae08\uba54\ub2ec"}, {"font": {"color": "white"}, "id": "\uc740\uba54\ub2ec", "label": "\uc740\uba54\ub2ec", "shape": "dot", "title": "\uc740\uba54\ub2ec"}, {"font": {"color": "white"}, "id": "\uac1c\ub9c9\uc2dd", "label": "\uac1c\ub9c9\uc2dd", "shape": "dot", "title": "\uac1c\ub9c9\uc2dd"}, {"font": {"color": "white"}, "id": "\uc544\uc774\uc2a4\ud558\ud0a4", "label": "\uc544\uc774\uc2a4\ud558\ud0a4", "shape": "dot", "title": "\uc544\uc774\uc2a4\ud558\ud0a4"}, {"font": {"color": "white"}, "id": "\uae40\uc5f0\uc544", "label": "\uae40\uc5f0\uc544", "shape": "dot", "title": "\uae40\uc5f0\uc544"}, {"font": {"color": "white"}, "id": "\uc544\uc2dc\uc548", "label": "\uc544\uc2dc\uc548", "shape": "dot", "title": "\uc544\uc2dc\uc548"}, {"font": {"color": "white"}, "id": "\uc6d4\ub4dc\ucef5", "label": "\uc6d4\ub4dc\ucef5", "shape": "dot", "title": "\uc6d4\ub4dc\ucef5"}, {"font": {"color": "white"}, "id": "\ud53c\uaca8", "label": "\ud53c\uaca8", "shape": "dot", "title": "\ud53c\uaca8"}, {"font": {"color": "white"}, "id": "\ub3d9\uba54\ub2ec", "label": "\ub3d9\uba54\ub2ec", "shape": "dot", "title": "\ub3d9\uba54\ub2ec"}, {"font": {"color": "white"}, "id": "\uacc4\uc8fc", "label": "\uacc4\uc8fc", "shape": "dot", "title": "\uacc4\uc8fc"}, {"font": {"color": "white"}, "id": "\ub2e8\uccb4\uc804", "label": "\ub2e8\uccb4\uc804", "shape": "dot", "title": "\ub2e8\uccb4\uc804"}, {"font": {"color": "white"}, "id": "\uc544\uc2dc\uc548\uac8c\uc784", "label": "\uc544\uc2dc\uc548\uac8c\uc784", "shape": "dot", "title": "\uc544\uc2dc\uc548\uac8c\uc784"}, {"font": {"color": "white"}, "id": "\ucc38\uac00\uad6d", "label": "\ucc38\uac00\uad6d", "shape": "dot", "title": "\ucc38\uac00\uad6d"}, {"font": {"color": "white"}, "id": "\uac1c\ucd5c\uc9c0", "label": "\uac1c\ucd5c\uc9c0", "shape": "dot", "title": "\uac1c\ucd5c\uc9c0"}]);
+        edges = new vis.DataSet([{"from": "\uc62c\ub9bc\ud53d", "to": "\ub3d9\uacc4", "value": 7}, {"from": "\uc62c\ub9bc\ud53d", "to": "\ud3c9\ucc3d", "value": 7}, {"from": "\ud3c9\ucc3d", "to": "\ub3d9\uacc4", "value": 8}, {"from": "\uc18c\uce58", "to": "\ub3d9\uacc4", "value": 7}, {"from": "\uc18c\uce58", "to": "\ud3c9\ucc3d", "value": 7}, {"from": "\uc18c\uce58", "to": "\uc62c\ub9bc\ud53d", "value": 6}, {"from": "\uc2a4\ucf00\uc774\ud305", "to": "\ub3d9\uacc4", "value": 7}, {"from": "\uc1fc\ud2b8\ud2b8\ub799", "to": "\ub3d9\uacc4", "value": 7}, {"from": "\uc1fc\ud2b8\ud2b8\ub799", "to": "\uc62c\ub9bc\ud53d", "value": 6}, {"from": "\uae08\uba54\ub2ec\ub9ac\uc2a4\ud2b8", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\uae08\uba54\ub2ec\ub9ac\uc2a4\ud2b8", "to": "\uc62c\ub9bc\ud53d", "value": 6}, {"from": "\uc120\uc218\uad8c", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\uc720\ub2c8\ubc84\uc2dc\uc544\ub4dc", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\uc720\ub2c8\ubc84\uc2dc\uc544\ub4dc", "to": "\uc62c\ub9bc\ud53d", "value": 6}, {"from": "\uae08\uba54\ub2ec", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\uae08\uba54\ub2ec", "to": "\uc62c\ub9bc\ud53d", "value": 6}, {"from": "\uc740\uba54\ub2ec", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\uac1c\ub9c9\uc2dd", "to": "\uc62c\ub9bc\ud53d", "value": 6}, {"from": "\uac1c\ub9c9\uc2dd", "to": "\ud3c9\ucc3d", "value": 6}, {"from": "\uac1c\ub9c9\uc2dd", "to": "\ub3d9\uacc4", "value": 5}, {"from": "\uc544\uc774\uc2a4\ud558\ud0a4", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\uae40\uc5f0\uc544", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\uae40\uc5f0\uc544", "to": "\ud3c9\ucc3d", "value": 5}, {"from": "\uc544\uc2dc\uc548", "to": "\uc62c\ub9bc\ud53d", "value": 6}, {"from": "\uc544\uc2dc\uc548", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\uc6d4\ub4dc\ucef5", "to": "\uc62c\ub9bc\ud53d", "value": 6}, {"from": "\ud53c\uaca8", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\ub3d9\uba54\ub2ec", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\uacc4\uc8fc", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\ub2e8\uccb4\uc804", "to": "\ub3d9\uacc4", "value": 6}, {"from": "\uc544\uc2dc\uc548\uac8c\uc784", "to": "\uc62c\ub9bc\ud53d", "value": 7}, {"from": "\ucc38\uac00\uad6d", "to": "\uc62c\ub9bc\ud53d", "value": 5}, {"from": "\uac1c\ucd5c\uc9c0", "to": "\uc62c\ub9bc\ud53d", "value": 5}, {"from": "\uac1c\ucd5c\uc9c0", "to": "\ub3d9\uacc4", "value": 5}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "barnesHut": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.3,
+            "damping": 0.09,
+            "gravitationalConstant": -80000,
+            "springConstant": 0.001,
+            "springLength": 250
+        },
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
