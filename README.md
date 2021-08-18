@@ -72,4 +72,4 @@ vis_word_map.py에서 make_word_map에 원하는 키워드를 넣으시고 실�
 
 ![image](https://user-images.githubusercontent.com/84823612/129853460-e2688fa1-519b-41e5-ad09-a0b50f241484.png)
 
-자신만의 Word2vec 모델을 시각화 하고 싶으신경우, 해당 위키를 참고해주시기 바랍니다. [Word2vec 사용기]()
+자신만의 Word2vec 모델을 시각화 하고 싶으신경우, 해당 위키를 참고해주시기 바랍니다. [Word2vec 사용기](https://github.com/MangoSteen0903/Youtube-Trend-Analysis-Project/wiki/%EB%82%98%EB%AC%B4%EC%9C%84%ED%82%A4-Word2vec-%EB%AA%A8%EB%8D%B8%EB%A1%9C-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%B3%B4%EA%B8%B0)
