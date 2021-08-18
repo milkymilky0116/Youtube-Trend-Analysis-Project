@@ -17,7 +17,7 @@
 데이터 수집은 최근 많은 연령층을 아우르고 있는 플랫폼인 유튜브를 통해 진행하기로 하였습니다.
 ```
 ***
-### 기능
+### :school_satchel: 기능
 ```
 1.실시간 키워드 수집기
 -Word2vec을 이용한 연관단어 검색
@@ -31,7 +31,7 @@
 
 ```
 
-### UI
+### :computer: UI
 
 ![image](https://user-images.githubusercontent.com/84823612/129853607-dea2ba67-2102-442b-9a32-067998f59b8b.png)
 
@@ -45,7 +45,7 @@
 자세한 사항은 해당 프로젝트의 위키에서 Crawler 설치 가이드를 참조해주세요. [Crawler 설치 가이드](https://github.com/MangoSteen0903/Youtube-Trend-Analysis-Project/wiki/Crawler-%EC%84%A4%EC%B9%98-%EA%B0%80%EC%9D%B4%EB%93%9C)
 
 ***
-### Collecting Data / Analysis
+### :notebook: Collecting Data / Analysis
 
 ![image](https://user-images.githubusercontent.com/84823612/129851961-9cfc4230-c069-4d92-bcfd-b08d5594db0b.png)
 
