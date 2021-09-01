@@ -29,4 +29,5 @@ if __name__ == "__main__":
         options=chrome_options
     )
     keyword_list=['강아지','고양이','뉴스','여행','예능','축구','스마트폰','운동','게임','요리']
-    Youtube_Crawler(keyword_list,'zofo3v8hwj',"uSaxHZaefo6WTQ2rwcdNJqVGnngg3QkjA10dvEw9","AIzaSyA8AVDeWVW2aEqMds7z51gjhr8o3ebRyik",driver)
+    #keyword_list=['뉴스']
+    Youtube_Crawler(keyword_list,'client_id','client_secret','google_api',driver)

@@ -22,6 +22,18 @@ for word in vocab:
         targets.append(dst)
         weights.append(val)
 edge_data=zip(sources,targets,weights)
+
+for e in edge_data:
+        src=e[0]
+        dst=e[1]
+        val=e[2]
+        net.add_node(src,src, title=src)
+        net.add_node(dst,dst, title=dst)
+        net.add_edge(src,dst, value=round(val*10))
+
+net.show('word_map.html')
+"""
 df=pd.DataFrame(edge_data, columns=['src','dst','weight'])
 df.to_csv('edge_data.csv',mode='w', index=False, encoding='utf-8')
+"""
 

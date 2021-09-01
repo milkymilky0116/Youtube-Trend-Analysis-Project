@@ -161,30 +161,22 @@ class Youtube_Crawler:
             current_view=self.video_info_views[i]
             link=(self.video_info_link[i],)
 
-            check="SELECT COUNT(*) FROM Information_schema.tables WHERE table_name= %s"
+            
+            sql="SELECT video_info_link,video_info_views FROM youtube_test_data WHERE video_info_link=%s"
+            cur.execute(sql,link)
+            result=cur.fetchall()
 
-            cur.execute(check,(db_name))
-            ava_val=cur.fetchall()
-            #테이블이 존재하는지에 대한 여부를 얻는 sql문을 실행합니다.
-
-            print(ava_val)
-
-            if ava_val[0][0]!=0: #존재한다면 다음과 같이 실행합니다. (0: 테이블이 없음 1: 존재함)
-                sql="SELECT video_info_link,video_info_views FROM {} WHERE video_info_link=%s".format(db_name)
+            print('result:',result)
+            if len(result)>0:
+                sql='DELETE FROM youtube_test_data WHERE video_info_link=%s'
                 cur.execute(sql,link)
-                result=cur.fetchall()
-
-                print(result)
-                if len(result)>0:
-                    sql='DELETE FROM {} WHERE video_info_link=%s'.format(db_name)
-                    cur.execute(sql,link)
-                    conn.commit()
+                conn.commit()
                     #테이블의 중복을 제거하는 sql문을 실행합니다.
 
-                    past_result=result[0][1]
-                    change_rate=int((int(current_view)-past_result)/past_result *100)
-                    change_value=int(current_view)-past_result
-                    #데이터가 이전에 존재한다면 이전의 조회수와 현재의 조회수를 비교해 증가량과 비율을 계산합니다.
+                past_result=result[0][1]
+                change_rate=int((int(current_view)-past_result)/past_result *100)
+                change_value=int(current_view)-past_result
+                #데이터가 이전에 존재한다면 이전의 조회수와 현재의 조회수를 비교해 증가량과 비율을 계산합니다.
             
             keyword=self.video_info_keywords[i].split(' ')
 
@@ -369,7 +361,7 @@ class Youtube_Crawler:
         print("Stage 2: Parsing Data")
         print("="*50)
         self.parsing_data()
-
+        
         print("="*50)
         print("Stage 3: Summary Data")
         print("="*50)
@@ -381,19 +373,20 @@ class Youtube_Crawler:
         #driver=self.set_driver('server')
         self.comment_analysis(driver)
 
+
         print("="*50)
         print("Stage 5: Scoring Video")
         print("="*50)
 
-        self.scoring_video("110.165.16.124",30141,'root','sjlee3423','Youtube_Trend_Server')
+        self.scoring_video("ip","port",'UserName','Password','table_name')
 
         print("="*50)
         print("Stage 6: Save Data to Maria DB")
         print("="*50)
-        self.save_df_to_db("110.165.16.124",30141,'root','sjlee3423','Youtube_Trend_Server')
+        self.save_df_to_db("ip","port",'UserName','Password','table_name')
 
         print("="*50)
         print("Stage 7: Ranking Videos")
         print("="*50)
 
-        self.ranking_data("110.165.16.124",30141,'root','sjlee3423','Youtube_Trend_Server')
+        self.ranking_data("ip","port",'UserName','Password','table_name')

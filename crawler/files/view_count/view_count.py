@@ -38,7 +38,7 @@ def main():
  
     data=zip(date_result,link_result,result)
     df=pd.DataFrame(data,columns=['date','link','views'])
-    engine=create_engine('mysql+mysqlconnector://root:sjlee3423@110.165.16.124:30141/Youtube_Trend_Server?charset=utf8mb4')
+    engine=create_engine('mysql+mysqlconnector://Username:Password@ip:port/table?charset=utf8mb4')
     df.to_sql(name='youtube_view_data',con=engine,if_exists='append',index=False)
     end=time.time()
     print(tm)

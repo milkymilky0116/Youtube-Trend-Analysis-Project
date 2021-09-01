@@ -45,7 +45,7 @@ RUN export JAVA_HOME
 
 
 # 기본 패키지들 설치 및 Python 3.6 설치
-RUN apt-get update
+RUN apt-get update --fix-missing
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:fkrull/deadsnakes
 RUN apt-get install -y libmysqlclient-dev

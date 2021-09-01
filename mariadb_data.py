@@ -36,7 +36,7 @@ def get_analysis_data(data):
     line_chart_dict={}
     pie_chart_dict={}
 
-    conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
+    conn=pymysql.connect(host="",port=30141, user='', password='', db='', charset='utf8mb4')
     cur=conn.cursor()
     link=(data['value'],)
 
@@ -105,7 +105,7 @@ def get_analysis_data(data):
 
 
 def get_youtube_data(query_num,*args):
-    conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
+    conn=pymysql.connect(host="",port=30141, user='', password='', db='', charset='utf8mb4')
     cur=conn.cursor()
     elements=[]
     for i in args:
@@ -131,7 +131,7 @@ def get_youtube_data(query_num,*args):
     return df
 def get_random_keyword():
 
-    conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
+    conn=pymysql.connect(host="",port=30141, user='', password='', db='', charset='utf8mb4')
     cur=conn.cursor()
     sql="SELECT video_info_keywords FROM youtube_test_data ORDER BY video_info_rank"
     #keyword=["고양이","강아지"]
@@ -151,7 +151,7 @@ def get_random_keyword():
     random_list=random.sample(count_word_list,10)
     return random_list
 def get_social_weather():
-    conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
+    conn=pymysql.connect(host="",port=30141, user='', password='', db='', charset='utf8mb4')
     cur=conn.cursor()
     current_time=datetime.today().strftime("%Y%m%d%H%M%S")
     sql='SELECT video_info_sentiment_result FROM youtube_test_data WHERE video_info_publish_date < %s'
@@ -185,7 +185,7 @@ def get_social_weather():
 get_social_weather()
 def get_query_data(keywords):
     
-    conn=pymysql.connect(host="110.165.16.124",port=30141, user='root', password='sjlee3423', db='Youtube_Trend_Server', charset='utf8mb4')
+    conn=pymysql.connect(host="",port=30141, user='', password='', db='', charset='utf8mb4')
     cur=conn.cursor()
     sql="SELECT video_info_thumbnails,video_info_link,video_info_title FROM youtube_test_data WHERE video_info_title or video_info_keywords REGEXP %s ORDER BY video_info_rank"
     query_keyword=[]
