@@ -1,5 +1,5 @@
 # Youtube-Trend-Analysis-Project 
-(유튜브 실시간 트렌드 검색 프로젝트)
+(유튜브 실시간 트렌드 검색 프로젝트)- 🏆 오픈 인프라 경진대회(2021) 은상 수상
 
 ### :video_camera: Tensorflow, Word2Vec, Multi-criteria Decision 등을 이용한 실시간 유튜브 트렌드 프로젝트   
 
